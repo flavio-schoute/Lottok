@@ -21,6 +21,9 @@
         </style>
     </head>
     <body>
-        <p>Het werkt</p>
+        <div>
+            <p>Het werkt</p>
+            <a href="https://google.com" target="_blank" style="color: blue;">Google</a></a>
+        </div>
     </body>
 </html>
