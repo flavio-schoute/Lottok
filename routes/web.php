@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/login');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->group(function () {
+
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
