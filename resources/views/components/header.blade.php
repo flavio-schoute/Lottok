@@ -1,6 +1,6 @@
 <nav class="flex justify-between items-center h-16 shadow-lg font-semibold text-xl text-gray-800 leading-tight">
     <div class="logo">
-        <h1 class="mr-8 cursor-pointer">Logo</h1>
+        <h1 class="ml-8 cursor-pointer">Logo</h1>
     </div>
     <ul>
         <li>
