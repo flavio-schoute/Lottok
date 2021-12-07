@@ -5,7 +5,7 @@
         <x-slot name="logo">
         </x-slot>
 
-        <x-jet-validation-errors class="mb-4"/>
+        <x-jet-validation-errors class="mb-4"></x-jet-validation-errors>
 
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">
@@ -17,18 +17,18 @@
             @csrf
 
             <div>
-                <x-jet-label for="email" value="{{ __('Email') }}" />
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-jet-label for="email" value="{{ __('Email') }}"></x-jet-label>
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus></x-jet-input>
             </div>
 
             <div class="mt-4">
-                <x-jet-label for="password" value="{{ __('Wachtwoord') }}" />
-                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <x-jet-label for="password" value="{{ __('Wachtwoord') }}"></x-jet-label>
+                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password"></x-jet-input>
             </div>
 
             <div class="flex items-center justify-between mt-4">
                 <label for="remember_me" class="flex items-center">
-                    <x-jet-checkbox id="remember_me" name="remember" />
+                    <x-jet-checkbox id="remember_me" name="remember"></x-jet-checkbox>
                     <span class="ml-2 text-sm text-gray-600">{{ __('Mij onthouden') }}</span>
                 </label>
 

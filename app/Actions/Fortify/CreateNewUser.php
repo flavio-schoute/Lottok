@@ -5,8 +5,8 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Carbon;
 
 class CreateNewUser implements CreatesNewUsers
@@ -16,29 +16,30 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  array  $input
-     * @return \App\Models\User
+     * @param array $input
+     * @return User
+     * @throws ValidationException
      */
-    
+
     public function create(array $input)
     {
         Validator::make($input, [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'birthdate' => ['required', 'date_format:Y-m-d', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
+            'birth_date' => ['required', 'date_format:Y-m-d', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
         ])->validate();
-        
+
         return User::create([
-            'first_name' => $input['firstname'],
+            'first_name' => $input['last_name'],
             'last_name' => $input['lastname'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'birth_date' => $input['birthdate'],
+            'birth_date' => $input['birth_date'],
             'credits' => 5,
-            'is_admin' => 0,
-            'is_active' => 1,
+            'is_admin' => false,
+            'is_active' => true,
             'current_guess_streak' => 0,
         ]);
 
