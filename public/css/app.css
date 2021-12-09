@@ -765,39 +765,6 @@ select {
 [type='file']:focus {
 	outline: 1px auto -webkit-focus-ring-color;
 }
-.container {
-	width: 100%;
-}
-@media (min-width: 640px) {
-
-	.container {
-		max-width: 640px;
-	}
-}
-@media (min-width: 768px) {
-
-	.container {
-		max-width: 768px;
-	}
-}
-@media (min-width: 1024px) {
-
-	.container {
-		max-width: 1024px;
-	}
-}
-@media (min-width: 1280px) {
-
-	.container {
-		max-width: 1280px;
-	}
-}
-@media (min-width: 1536px) {
-
-	.container {
-		max-width: 1536px;
-	}
-}
 .prose {
 	color: #374151;
 	max-width: 65ch;
@@ -1215,11 +1182,11 @@ select {
 .mb-4 {
 	margin-bottom: 1rem;
 }
-.mr-8 {
-	margin-right: 2rem;
-}
 .ml-8 {
 	margin-left: 2rem;
+}
+.mr-8 {
+	margin-right: 2rem;
 }
 .mb-8 {
 	margin-bottom: 2rem;
@@ -1235,9 +1202,6 @@ select {
 }
 .inline-flex {
 	display: inline-flex;
-}
-.table {
-	display: table;
 }
 .grid {
 	display: grid;
