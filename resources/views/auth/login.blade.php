@@ -32,7 +32,7 @@
                     <span class="ml-2 text-sm text-gray-600">{{ __('Mij onthouden') }}</span>
                 </label>
 
-                <x-jet-button class="ml-4">
+                <x-jet-button class="ml-4 bg-indigo-600">
                     {{ __('Inloggen') }}
                 </x-jet-button>
             </div>
