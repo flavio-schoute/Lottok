@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Guess;
+use App\Models\Game;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class GuessPolicy
+class GamePolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class GuessPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Game  $game
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Guess $guess)
+    public function view(User $user, Game $game)
     {
         //
     }
@@ -48,10 +48,10 @@ class GuessPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Game  $game
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Guess $guess)
+    public function update(User $user, Game $game)
     {
         //
     }
@@ -60,10 +60,10 @@ class GuessPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Game  $game
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Guess $guess)
+    public function delete(User $user, Game $game)
     {
         //
     }
@@ -72,10 +72,10 @@ class GuessPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Game  $game
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Guess $guess)
+    public function restore(User $user, Game $game)
     {
         //
     }
@@ -84,10 +84,10 @@ class GuessPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Game  $game
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Guess $guess)
+    public function forceDelete(User $user, Game $game)
     {
         //
     }

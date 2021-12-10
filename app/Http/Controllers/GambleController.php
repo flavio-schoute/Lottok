@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guess;
-use Illuminate\Http\Request;
+use App\Models\Gamble;
+use App\Http\Requests\StoreGambleRequest;
+use App\Http\Requests\UpdateGambleRequest;
 
-class GuessController extends Controller
+class GambleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,10 +31,10 @@ class GuessController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreGambleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreGambleRequest $request)
     {
         //
     }
@@ -41,10 +42,10 @@ class GuessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Gamble  $gamble
      * @return \Illuminate\Http\Response
      */
-    public function show(Guess $guess)
+    public function show(Gamble $gamble)
     {
         //
     }
@@ -52,10 +53,10 @@ class GuessController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Gamble  $gamble
      * @return \Illuminate\Http\Response
      */
-    public function edit(Guess $guess)
+    public function edit(Gamble $gamble)
     {
         //
     }
@@ -63,11 +64,11 @@ class GuessController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Http\Requests\UpdateGambleRequest  $request
+     * @param  \App\Models\Gamble  $gamble
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Guess $guess)
+    public function update(UpdateGambleRequest $request, Gamble $gamble)
     {
         //
     }
@@ -75,10 +76,10 @@ class GuessController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Guess  $guess
+     * @param  \App\Models\Gamble  $gamble
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Guess $guess)
+    public function destroy(Gamble $gamble)
     {
         //
     }

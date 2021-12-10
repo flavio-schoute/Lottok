@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class MatchSeeder extends Seeder
+class GoalSeeder extends Seeder
 {
     /**
      * Run the database seeds.
