@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MatchTeam extends Pivot
+class Goal extends Pivot
 {
     //
 }

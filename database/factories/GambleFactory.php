@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MatchTeamFactory extends Factory
+class GambleFactory extends Factory
 {
     /**
      * Define the model's default state.

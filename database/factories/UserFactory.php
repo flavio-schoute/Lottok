@@ -26,12 +26,20 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'birth_date' => $this->faker->date(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'credits' => $this->faker->randomFloat(2, 0, 100),
+            'is_admin' => $this->faker->boolean(5),
+            'is_active' => 1,
+            'current_guess_streak' => $this->faker->numberBetween(0, 9),
         ];
+
+
     }
 
     /**
