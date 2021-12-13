@@ -4,10 +4,15 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\User;
+use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
 use Laravel\Jetstream\Features;
+use Stripe\Stripe;
 
 class UserFactory extends Factory
 {
@@ -38,9 +43,17 @@ class UserFactory extends Factory
             'is_active' => 1,
             'current_guess_streak' => $this->faker->numberBetween(0, 9),
         ];
-
-
     }
+
+    public function configure(): UserFactory
+    {
+        return $this->afterMaking(function (User $user) {
+            //
+        })->afterCreating(function (User $user) {
+            $user->createAsStripeCustomer();
+        });
+    }
+
 
     /**
      * Indicate that the model's email address should be unverified.

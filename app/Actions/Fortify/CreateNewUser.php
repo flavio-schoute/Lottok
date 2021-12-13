@@ -3,9 +3,11 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Laravel\Cashier\Cashier;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Illuminate\Support\Carbon;
 
@@ -31,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers
             'birth_date' => ['required', 'date_format:Y-m-d', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
@@ -43,6 +45,13 @@ class CreateNewUser implements CreatesNewUsers
             'current_guess_streak' => 0,
         ]);
 
-        // TODO: Add with Mollie also
+        $stripeCustomer = $user->createAsStripeCustomer();
+        $stripeCustomerId = $stripeCustomer->id;
+
+        $stripeUser = Cashier::findBillable($stripeCustomerId);
+        $stripeUser->applyBalance(500, 'Registratie bonus');
+//        $stripeUser->
+
+        return $user;
     }
 }
