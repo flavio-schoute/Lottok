@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +17,5 @@ Route::redirect('/', '/login');
 
 Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->group(function () {
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 });
