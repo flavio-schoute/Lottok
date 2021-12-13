@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GameFactory extends Factory
@@ -14,7 +15,9 @@ class GameFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'game_date' => $this->faker->dateTimeBetween('+0 days', '+1 month'),
+            'team_id1' => Team::all(['id'])->random(1)->first(),
+            'team_id2' => Team::all(['id'])->random(1)->last(),
         ];
     }
 }

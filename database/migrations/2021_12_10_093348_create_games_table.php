@@ -18,6 +18,7 @@ class CreateGamesTable extends Migration
             $table->dateTime('game_date');
             $table->foreignId('team_id1')->constrained();
             $table->foreignId('team_id2')->constrained();
+            $table->foreignId('winning_team_id')->nullable()->default(null)->constrained('teams');
             $table->timestamps();
         });
     }

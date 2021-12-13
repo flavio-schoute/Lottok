@@ -48,9 +48,9 @@ class CreateNewUser implements CreatesNewUsers
         $stripeCustomer = $user->createAsStripeCustomer();
         $stripeCustomerId = $stripeCustomer->id;
 
+        // Maybe delete this
         $stripeUser = Cashier::findBillable($stripeCustomerId);
         $stripeUser->applyBalance(500, 'Registratie bonus');
-//        $stripeUser->
 
         return $user;
     }
