@@ -16,8 +16,8 @@ class GameFactory extends Factory
     {
         return [
             'game_date' => $this->faker->dateTimeBetween('+0 days', '+1 month'),
-            'team_id1' => Team::all(['id'])->random(1)->first(),
-            'team_id2' => Team::all(['id'])->random(1)->last(),
+            'team_id1' => $this->faker->randomElement(Team::pluck('id')->toArray()),
+            'team_id2' => $this->faker->randomElement(Team::pluck('id')->toArray()),
         ];
     }
 }

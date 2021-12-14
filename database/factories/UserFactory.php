@@ -28,7 +28,7 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'first_name' => $this->faker->firstName(),
@@ -44,16 +44,6 @@ class UserFactory extends Factory
             'current_guess_streak' => $this->faker->numberBetween(0, 9),
         ];
     }
-
-    public function configure(): UserFactory
-    {
-        return $this->afterMaking(function (User $user) {
-            //
-        })->afterCreating(function (User $user) {
-            $user->createAsStripeCustomer();
-        });
-    }
-
 
     /**
      * Indicate that the model's email address should be unverified.
