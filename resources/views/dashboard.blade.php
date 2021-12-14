@@ -9,14 +9,16 @@
                 </h2>
                 
                 <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 sm:m-0 ml-5 mr-5">
-                @foreach($games as $game)              
-                    <div id="{{ $game->id }}"  class="bg-white h-60 flex flex-col justify-center items-center text-indigo-800 border-2 border-indigo-800 hover:bg-indigo-800 hover:text-white transition ease-in-out cursor-pointer">
+                @foreach($games as $game) 
+                <a href="{{ route('gamble', $game->id) }}">             
+                    <div id="{{ $game->id }}" href="{{ route('gamble', ['id' => $game->id]) }}" class="bg-white h-60 flex flex-col justify-center items-center text-indigo-800 border-2 border-indigo-800 hover:bg-indigo-800 hover:text-white transition ease-in-out cursor-pointer">
     	                <h2 class="text-5xl font-medium">Uitslag</h2>
                         <br>
-                        <h3 class="text-3xl font-bold"> - 1</h3>
+                        <h3 class="text-3xl font-bold">{{ $game->goals }} - 1</h3>
                         <br>
-                        <h4 class="text-2xl font-semibold">{{ $game->name1 }} VS {{ $game->name2 }}</h4>
+                        <h4 class="text-2xl font-semibold">{{ $game->team_id1 }} VS {{ $game->team_id2 }}</h4>
                     </div>
+</a>
                 @Endforeach                    
                 </div>
             </div>

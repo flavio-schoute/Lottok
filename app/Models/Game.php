@@ -17,9 +17,16 @@ class Game extends Model
         'winning_team_id',
     ];
 
+    public function teams()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
     public function goals(): hasMany
     {
         return $this->hasMany(Goal::class);
     }
+
+
 
 }

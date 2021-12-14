@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Input;
+use Request;
 use App\Models\Gamble;
 use App\Http\Requests\StoreGambleRequest;
 use App\Http\Requests\UpdateGambleRequest;
@@ -13,9 +14,11 @@ class GambleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
+        dd(Input::get('id'));
+        return view('game.index');
     }
 
     /**
