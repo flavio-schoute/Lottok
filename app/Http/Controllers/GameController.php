@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
-
+use Illuminate\Http\Request;
+use App\Models\Goal;
+use App\Models\Gamble;
+use Illuminate\Support\Facades\DB;
 class GameController extends Controller
 {
     /**
@@ -13,7 +16,7 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Game $game)
     {
         //
     }
@@ -47,7 +50,13 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
-        //
+        $games = DB::table('games')
+        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.game_date'))
+        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+        ->where('games.id', '=', $game->id)
+        ->get();
+        return view('game.index', compact('games'));
     }
 
     /**

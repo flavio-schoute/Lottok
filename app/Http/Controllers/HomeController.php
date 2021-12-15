@@ -17,18 +17,24 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // $games = DB::table('games')
-        // ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-        // ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        // ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        // ->join('goals AS goal1', 'games.id', '=', 'goal1.game_id')
-        // ->with()
-        // ->get();
+        $games = DB::table('games')
+        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
+        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+        ->get();
         //'AND', 'team_id1', '=', 'goals.team_id'
 
-        $games = Game::with('goals', 'teams')->get();
+        $goals = Game::with('goals')->get();
 
-        //dd($games->toArray());
+        //$games2 = array_merge($games, $goals);
+        $goal1 = [];
+        $goal2 = [];
+        foreach($goals as $kv) {
+            array_push($goal1, $kv);
+            array_push($goal2, $kv);
+        }
+        dd($goal1[0]);
+
 
         return view('dashboard', compact('games'));
     }

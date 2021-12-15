@@ -16,9 +16,7 @@ class GambleController extends Controller
      */
     public function index(Request $request)
     {
-        
-        dd(Input::get('id'));
-        return view('game.index');
+        // return view('game.index');
     }
 
     /**

@@ -5,24 +5,37 @@
                 <h2 class="font-semibold md:text-5xl text-4xl text-indigo-800 leading-tight mb-10 sm:m-0 sm:mb-10 ml-5 mr-5">
                     {{ __('Wedstrijd') }}
                 </h2>
-
-                <div class="container">
-
+                <div class="container bg-white p-5 pt-12">
                     <div class="title">
-                        <h2>MATCH TITLE</h2>
-                    </div>
-
-                    <div class="standing">
-
-                    </div>
-
-                    <div class="team_and_multiplier">
+                    @foreach($games as $game)
+                          <h2 class="text-4xl font-bold text-center">{{ $game->name1 }} VS {{ $game->name2 }}</h2>
+                       @endforeach
 
                     </div>
-
-                    <div class="guess">
-
+                    <div class="standing mt-12">
+                    @foreach($games as $game)
+                        <h2 class="text-3xl font-bold text-center">STAND</h2>
+                        <h2 class="text-3xl font-medium text-center mt-5">4 - 1</h2>
+                       @endforeach
                     </div>
+                    <form class="mt-10 flex flex-col items-center justify-center">
+                        <div class="team_and_multiplier">
+                            <select class="text-center">
+                            @foreach($games as $game)
+                                <option>{{ $game->name1 }}</option>
+                                <option>{{ $game->name2 }}</option>
+                            @endforeach
+                            </select>
+                            @foreach($games as $game)
+                              <p class="text-xl font-medium text-center mt-5">{{ $game->name1 }}    -      {{ $game->name2 }}</p>
+                            @endforeach
+                        </div>
+
+                        <div class="guess mt-10">
+                            <input type="text" class="w-20 h-20 text-2xl">
+                        </div>  
+                    </form>
+                    
 
                     <div class="goks_geplaatst">
 
