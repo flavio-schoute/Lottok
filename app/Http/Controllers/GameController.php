@@ -39,7 +39,7 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
-        //
+       
     }
 
     /**

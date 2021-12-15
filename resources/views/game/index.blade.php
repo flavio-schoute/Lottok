@@ -18,9 +18,10 @@
                         <h2 class="text-3xl font-medium text-center mt-5">4 - 1</h2>
                        @endforeach
                     </div>
-                    <form class="mt-10 flex flex-col items-center justify-center">
+                    <form action="{{ route('gamble.store') }}" class="mt-10 flex flex-col items-center justify-center">
+                    @csrf
                         <div class="team_and_multiplier">
-                            <select class="text-center">
+                            <select name="chosen_team" class="text-center">
                             @foreach($games as $game)
                                 <option>{{ $game->name1 }}</option>
                                 <option>{{ $game->name2 }}</option>
@@ -32,9 +33,9 @@
                         </div>
 
                         <div class="guess mt-10">
-                            <input type="text" class="w-48 h-20 text-2xl">
+                            <input type="text" name="chosen_money" class="w-48 h-20 text-2xl">
                         </div>  
-                        <button type="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
+                        <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
                     </form>
                     
 
