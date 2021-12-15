@@ -32,8 +32,9 @@
                         </div>
 
                         <div class="guess mt-10">
-                            <input type="text" class="w-20 h-20 text-2xl">
+                            <input type="text" class="w-48 h-20 text-2xl">
                         </div>  
+                        <button type="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
                     </form>
                     
 
