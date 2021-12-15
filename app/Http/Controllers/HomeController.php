@@ -27,13 +27,13 @@ class HomeController extends Controller
         $goals = Game::with('goals')->get();
 
         //$games2 = array_merge($games, $goals);
-        $goal1 = [];
-        $goal2 = [];
-        foreach($goals as $kv) {
-            array_push($goal1, $kv);
-            array_push($goal2, $kv);
-        }
-        dd($goal1[0]);
+       //$goal1 = [];
+       //$goal2 = [];
+       //foreach($goals as $kv) {
+       //    array_push($goal1, $kv);
+       //    array_push($goal2, $kv);
+       //}
+        //dd($goal1);
 
 
         return view('dashboard', compact('games'));

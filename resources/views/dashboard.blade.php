@@ -16,7 +16,7 @@
                         <br>
                         <h3 class="text-3xl font-bold">4 - 1</h3>
                         <br>
-                        <h4 class="text-2xl font-semibold">{{ $game->team_id1 }} VS {{ $game->team_id2 }}</h4>
+                        <h4 class="text-2xl font-semibold">{{ $game->name1 }} VS {{ $game->name2 }}</h4>
                     </div>
                 </a>
                 @Endforeach                    
