@@ -14,7 +14,6 @@ class GoalFactory extends Factory
     public function definition()
     {
         return [
-            //
         ];
     }
 }
