@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Gamble extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'game_id',
+        'team_id',
+        'bet_credit',
+    ];
+
 }

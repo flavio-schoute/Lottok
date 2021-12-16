@@ -23,6 +23,6 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
     
     //Route::get('/gamble', [GambleController::class, 'index'])->name('gamble');
-
+    Route::resource('gamble', GambleController::class);
     Route::resource('game', GameController::class);
 });

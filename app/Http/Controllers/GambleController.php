@@ -37,7 +37,15 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request)
     {
-        //
+         //$userValidation = $request->safe()->only('chosen_team', 'chosen_money');
+        $gamble = Gamble::create([
+            'team_id' => 1,
+            'game_id' => 1,
+            'user_id' => 1,
+            'bet_credit' => 2,
+        ]);
+        dd($gamble);
+        return redirect()->route('game.index')->with('success', 'Gok geplaatst!');
     }
 
     /**
