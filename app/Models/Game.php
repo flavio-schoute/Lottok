@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
@@ -17,16 +18,9 @@ class Game extends Model
         'winning_team_id',
     ];
 
-    public function teams()
+    public function teams(): BelongsToMany
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsToMany(Team::class);
     }
-
-    public function goals(): hasMany
-    {
-        return $this->hasMany(Goal::class);
-    }
-
-
 
 }
