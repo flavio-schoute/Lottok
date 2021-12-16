@@ -23,14 +23,21 @@
                     <form action="{{ route('gamble.store') }}" method="post" class="mt-10 flex flex-col items-center justify-center">
                         @csrf
 
-                  
+                        
                         <div class="team_and_multiplier">
                             <select name="chosen_team" class="text-center">
                             @foreach($games as $game)
-                                <option>{{ $game->name1 }}</option>
-                                <option>{{ $game->name2 }}</option>
+                                <option value="{{ $game->teamid1 }}">{{  $game->name1    }}</option>
+                                <option value="{{ $game->teamid2 }}">{{ $game->name2 }}</option>
                             @endforeach
                             </select>
+                            
+                            <select class="hidden" name="gameid" class="text-center">
+                            @foreach($games as $game)
+                                <option value="{{ $gameid }}">{{  $gameid  }}</option>
+                            @endforeach
+                            </select>
+
                             @foreach($games as $game)
                               <p class="text-xl font-medium text-center mt-5">{{ $game->name1 }}    -      {{ $game->name2 }}</p>
                             @endforeach

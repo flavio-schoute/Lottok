@@ -17,31 +17,9 @@ class HomeController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(Request $request)
+    public function index()
     {
-//        $games = DB::table('games')
-//        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-//        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-//        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-//        ->get();
-        //'AND', 'team_id1', '=', 'goals.team_id'
-
-        //$goals = Game::with('goals')->get();
-
-        //$games2 = array_merge($games, $goals);
-      //$goal1 = [];
-      //$goal2 = [];
-      //foreach($goals as $kv) {
-      //    array_push($goal1, $kv);
-      //    array_push($goal2, $kv);
-      //}
-      // dd($goal1);
-
-        $games = Team::with('games')->get();
-
-//        dd($games);
-
-        return view('dashboard', compact('games'));
+        return redirect()->route('gamble.index');
     }
 
     /**
