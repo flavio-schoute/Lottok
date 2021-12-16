@@ -9,7 +9,8 @@ class Team extends Model
 {
     use HasFactory;
 
-    public function games() {
-        return $this->hasMany(Game::class, 'team_id1');
+    public function games()
+    {
+        return $this->hasMany(Game::class);
     }
 }
