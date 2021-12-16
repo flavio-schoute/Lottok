@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use App\Models\Game;
-use App\Models\Goal;
-use App\Models\Gamble;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -13,15 +15,15 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index(Request $request)
     {
-        $games = DB::table('games')
-        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        ->get();
+//        $games = DB::table('games')
+//        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
+//        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+//        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+//        ->get();
         //'AND', 'team_id1', '=', 'goals.team_id'
 
         //$goals = Game::with('goals')->get();
@@ -35,6 +37,9 @@ class HomeController extends Controller
       //}
       // dd($goal1);
 
+        $games = Team::with('games')->get();
+
+//        dd($games);
 
         return view('dashboard', compact('games'));
     }
@@ -42,7 +47,7 @@ class HomeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -52,8 +57,8 @@ class HomeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -64,7 +69,7 @@ class HomeController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -75,7 +80,7 @@ class HomeController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -85,9 +90,9 @@ class HomeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -98,7 +103,7 @@ class HomeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
