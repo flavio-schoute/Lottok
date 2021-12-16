@@ -12,7 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 
 class GambleController extends Controller
 {
@@ -123,7 +123,7 @@ class GambleController extends Controller
         $gamble = Gamble::create([
             'team_id' => $request->chosen_team,
             'game_id' => $request->gameid,
-            'user_id' => 1,
+            'user_id' => Auth::user()->id,
             'bet_credit' => $request->chosen_money,
         ]);
 

@@ -23,9 +23,9 @@
                     <form action="{{ route('gamble.store') }}" method="post" class="mt-10 flex flex-col items-center justify-center">
                         @csrf
 
-                        
                         <div class="team_and_multiplier">
-                            <select name="chosen_team" class="text-center">
+                            <label for="chosen_team">Selecteer winnende team</label><br>
+                            <select name="chosen_team" class="text-center w-48">
                             @foreach($games as $game)
                                 <option value="{{ $game->teamid1 }}">{{  $game->name1    }}</option>
                                 <option value="{{ $game->teamid2 }}">{{ $game->name2 }}</option>
@@ -39,12 +39,11 @@
                             </select>
 
                             @foreach($games as $game)
-                              <p class="text-xl font-medium text-center mt-5">{{ $game->name1 }}    -      {{ $game->name2 }}</p>
+                              <p class="text-xl font-medium text-center mt-7">{{ $game->name1 }}    -      {{ $game->name2 }}</p>
                             @endforeach
                         </div>
-
                         <div class="guess mt-10">
-
+                            <label for="chosen_money">Selecteer gok bedrag</label><br>
                             <input type="text" name="chosen_money" class="w-48 h-20 text-2xl">
                         </div>  
                         <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
