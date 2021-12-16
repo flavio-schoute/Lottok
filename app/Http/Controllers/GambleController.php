@@ -37,6 +37,7 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request)
     {
+        dd('sss');
          //$userValidation = $request->safe()->only('chosen_team', 'chosen_money');
         $gamble = Gamble::create([
             'team_id' => 1,
