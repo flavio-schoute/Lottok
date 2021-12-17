@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Team;
+use App\Http\Requests\StoreGambleRequest;
 use App\Models\Gamble;
 use App\Models\Game;
-use App\Http\Requests\StoreGambleRequest;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Models\Team;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,11 +19,11 @@ class GambleController extends Controller
      */
     public function index(Request $request)
     {
-        $games = DB::table('games')
-        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        ->get();
+//        $games = DB::table('games')
+//        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
+//        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+//        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+//        ->get();
         //'AND', 'team_id1', '=', 'goals.team_id'
 
         //$goals = Game::with('goals')->get();
@@ -41,9 +37,9 @@ class GambleController extends Controller
         //}
         // dd($goal1);
 
-        //$games = Team::with('games')->get();
+        $games = Game::with('teams')->get();
 
-        //        dd($games);
+        dd($games);
 
         return view('dashboard', compact('games'));
 
