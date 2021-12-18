@@ -52,7 +52,9 @@
 
 
                     <div class="goks_geplaatst">
-
+             
+                            {{ $gambles }}
+                      
                     </div>
                 </div>
             </div>

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGambleRequest;
+use App\Models\Team;
 use App\Models\Gamble;
 use App\Models\Game;
-use App\Models\Team;
+use App\Http\Requests\StoreGambleRequest;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,11 +23,11 @@ class GambleController extends Controller
      */
     public function index(Request $request)
     {
-//        $games = DB::table('games')
-//        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-//        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-//        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-//        ->get();
+        $games = DB::table('games')
+        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
+        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+        ->get();
         //'AND', 'team_id1', '=', 'goals.team_id'
 
         //$goals = Game::with('goals')->get();
@@ -36,10 +40,9 @@ class GambleController extends Controller
         //    array_push($goal2, $kv);
         //}
         // dd($goal1);
+        //$games = Team::with('games')->get();
 
-        $games = Game::with('teams')->get();
-
-        dd($games);
+        //        dd($games);
 
         return view('dashboard', compact('games'));
 
@@ -204,7 +207,17 @@ class GambleController extends Controller
         ->where('games.id', '=', $game->id)
         ->get();
         $gameid = $game->id;
-        return view('game.index', compact('games','gameid'));
+
+
+        //$gambles = DB::raw('SELECT COUNT(gambles.team_id),teams.name AS name FROM `gambles` INNER JOIN teams ON gambles.team_id = teams.id WHERE gambles.game_id = 8 GROUP BY gambles.team_id');
+        $gambles = DB::table('gambles')
+        ->select(DB::raw('gambles.team_id, teams.name AS name'))
+        ->join('teams', 'gambles.team_id', '=', 'teams.id')
+        ->where('gambles.game_id', '=', $gameid)
+        ->groupBy('gambles.team_id')
+        ->count('gambles.team_id');
+        dd($gambles);
+        return view('game.index', compact('games','gameid', 'gambles'));
     }
 
     /**
