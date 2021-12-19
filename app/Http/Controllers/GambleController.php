@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Team;
+use App\Http\Requests\StoreGambleRequest;
+use App\Http\Requests\UpdateGambleRequest;
 use App\Models\Gamble;
 use App\Models\Game;
-use App\Http\Requests\StoreGambleRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GambleController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $games = DB::table('games')
-        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.id'))
-        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        ->get();
+        $games = Game::query()
+            ->selectRaw('team1.name AS name1, team2.name AS name2, games.id')
+            ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+            ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+            ->paginate(9);
+
         //'AND', 'team_id1', '=', 'goals.team_id'
 
         //$goals = Game::with('goals')->get();
@@ -37,72 +37,20 @@ class GambleController extends Controller
         //$goal2 = [];
         //foreach($goals as $kv) {
         //    array_push($goal1, $kv);
-        //    array_push($goal2, $kv);
+        //      $goals = Game::with('goals')->get();
+        ////        dd($goals);array_push($goal2, $kv);
         //}
         // dd($goal1);
-        //$games = Team::with('games')->get();
 
-        //        dd($games);
+//
 
         return view('dashboard', compact('games'));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -112,8 +60,8 @@ class GambleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreGambleRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreGambleRequest $request
+     * @return Response
      */
     public function store(StoreGambleRequest $request)
     {
@@ -193,8 +141,8 @@ class GambleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Gamble  $gamble
-     * @return \Illuminate\Http\Response
+     * @param Gamble $gamble
+     * @return Response
      */
     public function show($id)
     {
@@ -223,8 +171,8 @@ class GambleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Gamble  $gamble
-     * @return \Illuminate\Http\Response
+     * @param Gamble $gamble
+     * @return Response
      */
     public function edit(Gamble $gamble)
     {
@@ -234,9 +182,9 @@ class GambleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateGambleRequest  $request
-     * @param  \App\Models\Gamble  $gamble
-     * @return \Illuminate\Http\Response
+     * @param  UpdateGambleRequest  $request
+     * @param Gamble $gamble
+     * @return Response
      */
     public function update(UpdateGambleRequest $request, Gamble $gamble)
     {
@@ -246,8 +194,8 @@ class GambleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Gamble  $gamble
-     * @return \Illuminate\Http\Response
+     * @param Gamble $gamble
+     * @return Response
      */
     public function destroy(Gamble $gamble)
     {
