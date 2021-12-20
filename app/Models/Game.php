@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
 {
@@ -15,6 +16,11 @@ class Game extends Model
         'team_id2',
         'winning_team_id',
     ];
+
+    public function goals(): HasMany
+    {
+        return $this->hasMany(GameTeam::class)->select('game_id', 'team_id', 'score');
+    }
 
     // TODO: Maybe convert later to Eloquent relations
 //    public function teams(): BelongsToMany

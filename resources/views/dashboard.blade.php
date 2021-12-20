@@ -6,7 +6,18 @@
                     {{ __('Wedstrijden') }}
                 </h2>
 
+
                 <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 sm:m-0">
+
+{{--                    <div style="border: 1px solid red">--}}
+{{--                        @foreach($goals as $goal)--}}
+{{--                            <p>Game ID: {{ $goal->id }}</p>--}}
+{{--                            @foreach($goal as $goa)--}}
+{{--                                <div>Goal: {{ $goa }}</div>--}}
+{{--                            @endforeach--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+
                     @foreach($games as $game)
                         <a href="{{ route('gamble.show', $game->id) }}">
                             <div id="{{ $game->id }}" class="bg-white h-60 flex flex-col justify-center items-center text-indigo-800 border-2 border-indigo-800 hover:bg-indigo-800 hover:text-white transition ease-in-out cursor-pointer">

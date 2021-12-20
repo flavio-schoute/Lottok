@@ -42,9 +42,10 @@ class GambleController extends Controller
         //}
         // dd($goal1);
 
-//
+        $goals = Game::with('goals')->get();
+//        dd($goals->toArray());
 
-        return view('dashboard', compact('games'));
+        return view('dashboard', compact('games', 'goals'));
     }
 
     /**
