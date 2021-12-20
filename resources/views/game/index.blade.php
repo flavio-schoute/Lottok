@@ -6,7 +6,7 @@
                     {{ __('Wedstrijd') }}
                 </h2>
                 <div class="container bg-white p-0 pb-5 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
-                    
+
                     @if (session('success'))
                     <div class="bg-green-600 w-full h-20 flex items-center justify-center">
                         <ul class="text-xl text-white text-center">
@@ -20,12 +20,12 @@
                         <div class="font-xl text-white">{{ __('Oeps! Er is iets fout gegaan.') }}</div>
                         <ul class="text-xl text-white text-center">
                             @if(session('failed'))
-                                <li>{{ session('failed') }}</li>
+                            <li>{{ session('failed') }}</li>
                             @endif
                             @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
                             @endif
                         </ul>
                     </div>
@@ -48,9 +48,12 @@
                     </div>
 
                     <form action="{{ route('gamble.store') }}" method="post" class="mt-10 flex flex-col items-center justify-center">
+                    @if($user_gamble == 0)    
                         @csrf
+                    @endif
 
                         <div class="team_and_multiplier flex flex-col items-center justify-center">
+                            @if($user_gamble == 0)
                             <label for="chosen_team">Selecteer winnende team</label><br>
                             <select name="chosen_team" class="text-center w-48">
                                 @foreach($games as $game)
@@ -58,7 +61,7 @@
                                 <option value="{{ $game->teamid2 }}">{{ $game->team_name2 }}</option>
                                 @endforeach
                             </select>
-
+                            @endif
                             <select class="hidden" name="gameid" class="text-center">
                                 @foreach($games as $game)
                                 <option value="{{ $gameid }}">{{ $gameid  }}</option>
@@ -69,14 +72,22 @@
                             <p class="text-xl font-medium text-center mt-7">{{ $game->team_name1 }} - {{ $game->team_name2 }}</p>
                             @endforeach
                         </div>
+                        @if($user_gamble == 0)
                         <div class="guess mt-10">
                             <label for="chosen_money">Selecteer gok bedrag</label><br>
                             <input type="text" name="chosen_money" class="w-48 h-20 text-2xl">
                         </div>
                         <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
-
+                        @endif
                     </form>
 
+                    <form action="{{ route('gamble.destroy', $gameid) }}" method="POST" class="mt-10 flex flex-col items-center justify-center">
+                        @if($user_gamble != 0)
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white" onsubmit="return confirm('Weet je zeker dat je deze gok wilt verwijderen?');">Annuleer gok</button>
+                        @endif
+                    </form>
 
                     <div class="goks_geplaatst mt-14">
                         <table class="w-64">

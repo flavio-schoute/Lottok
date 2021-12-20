@@ -93,7 +93,11 @@ class GambleController extends Controller
         ->groupBy("gambles.team_id","name")
         ->get();
 
-        return view('game.index', compact('games','gameid', 'gambles'));
+        $user_gamble = Gamble::query()
+        ->where('game_id', '=', $gameid)
+        ->where('user_id', '=', auth()->user()->id)
+        ->count();
+        return view('game.index', compact('games','gameid', 'gambles','user_gamble'));
     }
 
     /**
@@ -125,8 +129,16 @@ class GambleController extends Controller
      * @param Gamble $gamble
      * @return Response
      */
-    public function destroy(Gamble $gamble)
+    public function destroy($id)
     {
-        //
+        $gamble = Game::findOrFail($id);
+        //Finds the id from that user that you wants to delete
+        $user = Gamble::query()
+        ->where('user_id', '=', auth()->user()->id)
+        ->where('game_id', '=', $gamble->id)
+        ->delete();
+
+        //Redirects the user with message the user is deleted
+        return redirect()->back()->with('success','De gok is verwijderd');
     }
 }
