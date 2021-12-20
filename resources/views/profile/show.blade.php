@@ -1,10 +1,8 @@
 <x-app-layout>
-    
-
     <div>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <h2 class="font-semibold md:text-5xl text-4xl text-indigo-800 leading-tight mb-10 sm:m-0 sm:mb-10 ml-5 mr-5">
-                        {{ __('Profile') }}
+                        {{ __('Profiel') }}
             </h2>
             @if (Laravel\Fortify\Features::canUpdateProfileInformation())
                 @livewire('profile.update-profile-information-form')
