@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Update your account\'s profile information and email address.') }}
+        {{ __('Werk de profielgegevens en het e-mailadres van uw account bij.') }}
     </x-slot>
 
     <x-slot name="form">
@@ -65,6 +65,12 @@
             <x-jet-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" />
             <x-jet-input-error for="email" class="mt-2" />
         </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <p class="block font-medium text-sm text-gray-700 mb-1">Gok saldo:</p>
+            <p>{{ auth()->user()->credits }}</p>
+        </div>
+
     </x-slot>
 
     <x-slot name="actions">
