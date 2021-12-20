@@ -24,7 +24,17 @@ class StoreGambleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'chosen_money' => [
+                'required',
+                'numeric',
+                'min:1',
+            ],
+            'chosen_team' => [
+                'required',
+            ],
+            'gameid' => [
+                'required',
+            ],
         ];
     }
 }

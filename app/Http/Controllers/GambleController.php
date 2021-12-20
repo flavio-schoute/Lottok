@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGambleRequest;
 use App\Http\Requests\UpdateGambleRequest;
 use App\Models\Gamble;
+use App\Models\User;
 use App\Models\Game;
 use App\Models\Team;
 use Illuminate\Contracts\Foundation\Application;
@@ -29,22 +30,6 @@ class GambleController extends Controller
             ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
             ->paginate(9);
 
-        //'AND', 'team_id1', '=', 'goals.team_id'
-
-        //$goals = Game::with('goals')->get();
-
-        //$games2 = array_merge($games, $goals);
-        //$goal1 = [];
-        //$goal2 = [];
-        //foreach($goals as $kv) {
-        //    array_push($goal1, $kv);
-        //      $goals = Game::with('goals')->get();
-        ////        dd($goals);array_push($goal2, $kv);
-        //}
-        // dd($goal1);
-
-//        dd($games->toArray());
-
         return view('dashboard', compact('games'));
     }
 
@@ -66,76 +51,16 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request)
     {
-        //dd($request->toArray());
-        //$userValidation = $request->safe()->only('chosen_team', 'chosen_money');
+        $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'gameid');
+        if(auth()->user()->credits <= 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben');
         $gamble = Gamble::create([
-            'team_id' => $request->chosen_team,
-            'game_id' => $request->gameid,
+            'team_id' => $gambleValidation['chosen_team'],
+            'game_id' => $gambleValidation['gameid'],
             'user_id' => Auth::user()->id,
-            'bet_credit' => $request->chosen_money,
+            'bet_credit' => $gambleValidation['chosen_money'],
         ]);
 
-        return redirect()->route('gamble.index')->with('success', 'Gok geplaatst!');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return redirect()->back()->with('success', 'Gok geplaatst!');
 
     }
 
@@ -148,12 +73,11 @@ class GambleController extends Controller
     public function show($id)
     {
         $game = Game::findOrFail($id);
-
-        $games = DB::table('games')
-        ->select(DB::raw('team1.id as teamid1, team2.id as teamid2, team1.name AS name1, team2.name AS name2, games.game_date'))
-        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        ->where('games.id', '=', $game->id)
+        $games = Game::query()
+            ->selectRaw('team1.id as teamid1, team2.id as teamid2, team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score')
+            ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
+            ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+            ->where('games.id', '=', $game->id)
         ->get();
         $gameid = $game->id;
 
