@@ -14,10 +14,12 @@ class GameFactory extends Factory
      */
     public function definition()
     {
-        return [
+        return array(
             'game_date' => $this->faker->dateTimeBetween('+0 days', '+1 month'),
             'team_id1' => $this->faker->randomElement(Team::pluck('id')->toArray()),
             'team_id2' => $this->faker->randomElement(Team::pluck('id')->toArray()),
-        ];
+            'team1_score' => $this->faker->numberBetween(0, 5),
+            'team2_score' => $this->faker->numberBetween(0, 5),
+        );
     }
 }

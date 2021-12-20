@@ -28,6 +28,7 @@ class GambleController extends Controller
             ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score')
             ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
             ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
+            ->orderBy('games.game_date')
             ->paginate(9);
 
         return view('dashboard', compact('games'));
