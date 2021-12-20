@@ -51,12 +51,16 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request)
     {
+        if(auth()->user()->credits <= 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben!');
         $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'gameid');
-        if(auth()->user()->credits <= 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben');
-        $gamble = Gamble::create([
+        if($gambleValidation['chosen_money'] > auth()->user()->credits) return redirect()->back()->with('failed', 'Je gekozen bedrag is groter dan wat op account staat!');
+        $new_credits = auth()->user()->credits - $gambleValidation['chosen_money'];
+        User::query()
+        ->update(['credits' => $new_credits]);
+        Gamble::create([
             'team_id' => $gambleValidation['chosen_team'],
             'game_id' => $gambleValidation['gameid'],
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->user()->id,
             'bet_credit' => $gambleValidation['chosen_money'],
         ]);
 
