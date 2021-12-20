@@ -17,11 +17,6 @@ class Game extends Model
         'winning_team_id',
     ];
 
-    public function goals(): HasMany
-    {
-        return $this->hasMany(GameTeam::class)->select('game_id', 'team_id', 'score');
-    }
-
     // TODO: Maybe convert later to Eloquent relations
 //    public function teams(): BelongsToMany
 //    {

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreGambleRequest;
 use App\Http\Requests\UpdateGambleRequest;
 use App\Models\Gamble;
 use App\Models\Game;
+use App\Models\Team;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -23,7 +24,7 @@ class GambleController extends Controller
     public function index()
     {
         $games = Game::query()
-            ->selectRaw('team1.name AS name1, team2.name AS name2, games.id')
+            ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score')
             ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
             ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
             ->paginate(9);
@@ -42,10 +43,9 @@ class GambleController extends Controller
         //}
         // dd($goal1);
 
-        $goals = Game::with('goals')->get();
-//        dd($goals->toArray());
+//        dd($games->toArray());
 
-        return view('dashboard', compact('games', 'goals'));
+        return view('dashboard', compact('games'));
     }
 
     /**
@@ -163,7 +163,7 @@ class GambleController extends Controller
         ->where('gambles.game_id', '=', $gameid)
         ->groupBy("gambles.team_id","name")
         ->get();
- 
+
         return view('game.index', compact('games','gameid', 'gambles'));
     }
 

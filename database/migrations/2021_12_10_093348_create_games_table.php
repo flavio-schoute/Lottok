@@ -19,6 +19,8 @@ class CreateGamesTable extends Migration
             $table->foreignId('team_id1')->constrained();
             $table->foreignId('team_id2')->constrained();
             $table->foreignId('winning_team_id')->nullable()->default(null)->constrained('teams');
+            $table->unsignedInteger('team1_score')->default(0);
+            $table->unsignedInteger('team2_score')->default(0);
             $table->timestamps();
         });
     }
