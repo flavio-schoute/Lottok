@@ -5,7 +5,7 @@
                 <h2 class="font-semibold md:text-5xl text-4xl text-indigo-800 leading-tight mb-10 sm:m-0 sm:mb-10 ml-5 mr-5">
                     {{ __('Wedstrijd') }}
                 </h2>
-                <div class="container bg-white p-5 pt-12 shadow-md border-2">
+                <div class="container bg-white p-5 pt-12 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
 
                     <div class="title">
                         @foreach($games as $game)
@@ -51,10 +51,19 @@
                     </form>
 
 
-                    <div class="goks_geplaatst">
-             
-                            {{ $gambles }}
-                      
+                    <div class="goks_geplaatst mt-14">
+                        <table class="w-64">
+                            <tr>
+                              <th class="text-xl text-left">Aantal</th>
+                              <th class="text-xl text-left">Team</th>
+                            </tr>
+                            @foreach($gambles as $gamble)
+                            <tr>
+                              <td>{{ $gamble->aantal }}</td>
+                              <td>{{ $gamble->name }}</td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </div>
                 </div>
             </div>

@@ -156,15 +156,13 @@ class GambleController extends Controller
         ->get();
         $gameid = $game->id;
 
-
-        //$gambles = DB::raw('SELECT COUNT(gambles.team_id),teams.name AS name FROM `gambles` INNER JOIN teams ON gambles.team_id = teams.id WHERE gambles.game_id = 8 GROUP BY gambles.team_id');
         $gambles = DB::table('gambles')
-        ->select(DB::raw('gambles.team_id, teams.name AS name'))
+        ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
         ->join('teams', 'gambles.team_id', '=', 'teams.id')
         ->where('gambles.game_id', '=', $gameid)
-        ->groupBy('gambles.team_id')
-        ->count('gambles.team_id');
-        dd($gambles);
+        ->groupBy("gambles.team_id","name")
+        ->get();
+ 
         return view('game.index', compact('games','gameid', 'gambles'));
     }
 
