@@ -51,7 +51,7 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request): RedirectResponse
     {
-        if(auth()->user()->credits <= 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben!');
+        if(auth()->user()->credits < 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben!');
 
         $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'game_id');
 
@@ -82,24 +82,24 @@ class GambleController extends Controller
     {
         $game = Game::findOrFail($id);
         $games = Game::query()
-            ->selectRaw('team1.id as teamid1, team2.id as teamid2, team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score')
+            ->selectRaw('team1.id as teamid1, team2.id as teamid2, team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score, game_date')
             ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
             ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
             ->where('games.id', '=', $game->id)
-        ->get();
+            ->get();
         $gameid = $game->id;
 
         $gambles = DB::table('gambles')
-        ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
-        ->join('teams', 'gambles.team_id', '=', 'teams.id')
-        ->where('gambles.game_id', '=', $gameid)
-        ->groupBy("gambles.team_id","name")
-        ->get();
+            ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
+            ->join('teams', 'gambles.team_id', '=', 'teams.id')
+            ->where('gambles.game_id', '=', $gameid)
+            ->groupBy("gambles.team_id","name")
+            ->get();
 
         $user_gamble = Gamble::query()
-        ->where('game_id', '=', $gameid)
-        ->where('user_id', '=', auth()->user()->id)
-        ->count();
+            ->where('game_id', '=', $gameid)
+            ->where('user_id', '=', auth()->user()->id)
+            ->count();
         return view('game.index', compact('games','gameid', 'gambles','user_gamble'));
     }
 
