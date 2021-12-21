@@ -90,8 +90,8 @@
                         @endif
                     </form>
                     @foreach($games as $game)
-                        <p class="text-xl font-medium text-center mt-3">{{ date('m/d/Y', strtotime($game->game_date)) }}</p>
-                        <p class="text-xl font-medium text-center mt-3">{{ date('h:i:s', strtotime($game->game_date)) }}</p>
+                        <p class="text-xl font-medium text-center mt-3">{{ date('d/m/Y', strtotime($game->game_date)) }}</p>
+                        <p class="text-xl font-medium text-center mt-3">{{ date('h:i', strtotime($game->game_date)) }}</p>
                     @endforeach
                     <div class="goks_geplaatst mt-14">
                         <table class="w-64">

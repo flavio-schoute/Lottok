@@ -24,7 +24,7 @@ class GambleController extends Controller
     public function index()
     {
         $games = Game::query()
-            ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score')
+            ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score, game_date')
             ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
             ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
             ->orderBy('games.game_date')

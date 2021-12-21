@@ -15,6 +15,8 @@
                                 <h3 class="text-5xl font-medium">Uitslag</h3>
                                 <p class="text-3xl font-bold">{{ $game->team1_score }} - {{ $game->team2_score }}</p>
                                 <p class="text-2xl font-semibold">{{ $game->team_name1 }} VS {{ $game->team_name2 }}</p>
+                                <p class="text-base font-medium text-center mt-2">{{ date('d/m/Y', strtotime($game->game_date)) }}</p>
+                                <p class="text-base font-medium text-center mt-1">{{ date('h:i', strtotime($game->game_date)) }}</p>
                             </div>
                         </a>
                     @endforeach
