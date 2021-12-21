@@ -7,12 +7,11 @@ use App\Http\Requests\UpdateGambleRequest;
 use App\Models\Gamble;
 use App\Models\User;
 use App\Models\Game;
-use App\Models\Team;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GambleController extends Controller
@@ -48,19 +47,23 @@ class GambleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreGambleRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(StoreGambleRequest $request)
+    public function store(StoreGambleRequest $request): RedirectResponse
     {
         if(auth()->user()->credits <= 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben!');
-        $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'gameid');
+
+        $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'game_id');
+
         if($gambleValidation['chosen_money'] > auth()->user()->credits) return redirect()->back()->with('failed', 'Je gekozen bedrag is groter dan wat op account staat!');
-        $new_credits = auth()->user()->credits - $gambleValidation['chosen_money'];
-        User::query()
-        ->update(['credits' => $new_credits]);
+
+        $userNewCredits = auth()->user()->credits - $gambleValidation['chosen_money'];
+
+        User::query()->update(['credits' => $userNewCredits]);
+
         Gamble::create([
             'team_id' => $gambleValidation['chosen_team'],
-            'game_id' => $gambleValidation['gameid'],
+            'game_id' => $gambleValidation['game_id'],
             'user_id' => auth()->user()->id,
             'bet_credit' => $gambleValidation['chosen_money'],
         ]);

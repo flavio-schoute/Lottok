@@ -32,7 +32,7 @@ class StoreGambleRequest extends FormRequest
             'chosen_team' => [
                 'required',
             ],
-            'gameid' => [
+            'game_id' => [
                 'required',
             ],
         ];
