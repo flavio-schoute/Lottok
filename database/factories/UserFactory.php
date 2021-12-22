@@ -4,10 +4,15 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\User;
+use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
 use Laravel\Jetstream\Features;
+use Stripe\Stripe;
 
 class UserFactory extends Factory
 {
@@ -23,14 +28,20 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'birth_date' => $this->faker->date(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'credits' => $this->faker->randomFloat(2, 0, 100),
+            'is_admin' => $this->faker->boolean(5),
+            'is_active' => 1,
+            'current_guess_streak' => $this->faker->numberBetween(0, 9),
         ];
     }
 
