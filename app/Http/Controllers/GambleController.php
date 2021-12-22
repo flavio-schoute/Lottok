@@ -75,8 +75,8 @@ class GambleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Gamble $gamble
-     * @return Response
+     * @param $id
+     * @return Application|Factory|View
      */
     public function show($id)
     {
@@ -100,6 +100,7 @@ class GambleController extends Controller
             ->where('game_id', '=', $gameid)
             ->where('user_id', '=', auth()->user()->id)
             ->count();
+
         return view('game.index', compact('games','gameid', 'gambles','user_gamble'));
     }
 

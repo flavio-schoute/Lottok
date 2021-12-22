@@ -70,6 +70,7 @@
                             @foreach($games as $game)
                                 <p class="text-xl font-medium text-center mt-7">{{ $game->team_name1 }} - {{ $game->team_name2 }}</p>
                             @endforeach
+
                         </div>
                         @if($user_gamble == 0)
                         <div class="guess mt-10">
@@ -77,22 +78,24 @@
                             <input type="text" name="chosen_money" class="w-48 h-20 text-2xl">
                         </div>
                         <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white">Plaats gok</button>
-                      
+
                         @endif
                     </form>
-                    
+
+                        
                     <form action="{{ route('gamble.destroy', $gameid) }}" method="POST" class="mt-10 flex flex-col items-center justify-center">
                         @if($user_gamble != 0)
                             @csrf
                             @method('DELETE')
-                            <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white" onsubmit="return confirm('Weet je zeker dat je deze gok wilt verwijderen?');">Annuleer gok</button>
-                            
+                            <button type="submit" name="submit" class="mt-10 border border-solid border-black w-48 h-20 hover:bg-indigo-900 hover:text-white" onclick="return confirm('Weet je zeker dat je deze gok wilt verwijderen?');">Annuleer gok</button>
                         @endif
                     </form>
+
                     @foreach($games as $game)
                         <p class="text-xl font-medium text-center mt-3">{{ date('d/m/Y', strtotime($game->game_date)) }}</p>
                         <p class="text-xl font-medium text-center mt-3">{{ date('h:i', strtotime($game->game_date)) }}</p>
                     @endforeach
+
                     <div class="goks_geplaatst mt-14">
                         <table class="w-64">
                             <tr>
