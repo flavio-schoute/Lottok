@@ -19,6 +19,7 @@
         "lodash": "^4.17.19",
         "postcss": "^8.4.4",
         "postcss-import": "^14.0.1",
-        "tailwindcss": "^2.2.19"
+        "tailwindcss": "^2.2.19",
+        "node-forge": ">=1.0.0"
     }
 }
