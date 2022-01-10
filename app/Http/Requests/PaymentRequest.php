@@ -26,7 +26,7 @@ class PaymentRequest extends FormRequest
         return [
             'other-amount' => [
                 'required',
-                'min:1'
+//                'min:1'
             ]
         ];
     }
