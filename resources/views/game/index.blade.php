@@ -82,7 +82,7 @@
                         @endif
                     </form>
 
-                        
+
                     <form action="{{ route('gamble.destroy', $gameid) }}" method="POST" class="mt-10 flex flex-col items-center justify-center">
                         @if($user_gamble != 0)
                             @csrf
