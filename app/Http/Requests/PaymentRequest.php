@@ -24,9 +24,22 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'amount-5' => [
+//                'sometimes',
+                'integer'
+            ],
+            'amount-10' => [
+//                'sometimes',
+                'integer'
+            ],
+            'amount-20' => [
+//                'sometimes',
+                'integer'
+            ],
+
             'other-amount' => [
-                'required',
-//                'min:1'
+//                'sometimes',
+//                'exclude_if:other-amount,null'
             ]
         ];
     }

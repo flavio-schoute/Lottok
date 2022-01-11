@@ -47,15 +47,25 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-
         try {
+            $amount = 10;
+            $requestData = $request->validated();
+
+//            $amount = match ($requestData) {
+//                $requestData['amount-5'] => $requestData['amount-5'],
+//                $requestData['amount-10'] => $requestData['amount-10'],
+//                $requestData['amount-20'] => $requestData['amount-20'],
+//                $requestData['other-amount'] => $requestData['other-amount'],
+//            };
+
+
+
             $customer = Customer::retrieve(auth()->user()->stripe_id);
             $currency = config('cashier.currency');
 
             $returnUrl = redirect()->route('pay.index')->getTargetUrl();
 
-            $amount = $request->safe()->only('other-amount');
-            $unitAmount = $amount['other-amount'] * 100;
+            $unitAmount = $amount * 100;
 
             $session = Session::create([
                 'line_items' => [[
