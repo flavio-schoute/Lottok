@@ -98,12 +98,23 @@
             </div>
         </div>
     </div>
-</x-app-layout>
 
-{{--@push('scripts')--}}
-{{--    <script>--}}
-{{--        document.querySelector('#boxes').onchange = function() {--}}
-{{--            document.getElementById('other-amount').disabled = !this.checked;--}}
-{{--        };--}}
-{{--    </script>--}}
-{{--@endpush--}}
+    @push('pay-script')
+        @once
+            <script>
+                let boxes = document.querySelectorAll('#boxes');
+                let textFieldInput = document.getElementById('other-amount');
+
+                boxes.addEventListener('onchange', function() {
+                    textFieldInput.disabled = !boxes.checked;
+                })
+
+                // document.querySelector('#boxes').onchange = function() {
+                //     document.getElementById('other-amount').disabled = !this.checked;
+                // };
+
+            </script>
+        @endonce
+    @endpush
+
+</x-app-layout>

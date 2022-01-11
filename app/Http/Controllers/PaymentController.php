@@ -10,12 +10,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Cashier\Cashier;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -48,25 +45,21 @@ class PaymentController extends Controller
     public function store(PaymentRequest $request)
     {
         try {
-            $amount = 10;
-            $requestData = $request->validated();
+            // Get the requested amount, convert to string and then in a number
+            $requestedAmount = $request->validated();
+            $stringAmount = implode("", $requestedAmount);
+            $amount = floatval($stringAmount);
 
-//            $amount = match ($requestData) {
-//                $requestData['amount-5'] => $requestData['amount-5'],
-//                $requestData['amount-10'] => $requestData['amount-10'],
-//                $requestData['amount-20'] => $requestData['amount-20'],
-//                $requestData['other-amount'] => $requestData['other-amount'],
-//            };
-
-
-
+            // Get the customer and the currency
             $customer = Customer::retrieve(auth()->user()->stripe_id);
             $currency = config('cashier.currency');
 
+            // The url the user will be redirected to if the payment succeed or canceled
             $returnUrl = redirect()->route('pay.index')->getTargetUrl();
 
             $unitAmount = $amount * 100;
 
+            // Checkout session
             $session = Session::create([
                 'line_items' => [[
                     'price_data' => [
@@ -93,6 +86,7 @@ class PaymentController extends Controller
                 'cancel_url' => $returnUrl
             ]);
 
+            // Redirect to the hosted Stripe page to handle the payment
             return redirect($session->url, 303);
 
         } catch (ApiErrorException $e) {
