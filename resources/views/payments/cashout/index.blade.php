@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <x-jet-button class="mt-5">Betalen</x-jet-button>
+                        <x-jet-button class="mt-5">Uitcashen</x-jet-button>
                     </div>
                 </form>
             </div>

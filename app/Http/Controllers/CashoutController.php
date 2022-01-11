@@ -36,10 +36,10 @@ class CashoutController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param CashoutRequest $request
      * @return RedirectResponse
      */
-    public function store(CashoutRequest $request)
+    public function store(CashoutRequest $request): RedirectResponse
     {
         // TODO: Add iban or something?
 
