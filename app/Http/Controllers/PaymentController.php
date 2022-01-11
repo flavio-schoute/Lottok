@@ -24,7 +24,7 @@ class PaymentController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
         return view('payments.pay.index');
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashoutController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -33,4 +34,7 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
 
 
     Route::resource('pay', PaymentController::class);
+    Route::resource('cashout', CashoutController::class);
+
+
 });
