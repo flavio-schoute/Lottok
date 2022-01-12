@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GambleController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
 
     Route::resource('gamble', GambleController::class);
 
+    Route::resource('statistic', StatisticsController::class);
     // Route::resource('game', GameController::class);
 
 
