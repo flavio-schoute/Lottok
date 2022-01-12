@@ -59,7 +59,7 @@
 
                             <a href="{{ route('accounts.edit', $user->id) }}" class="text-blue-500 pr-5">Wijzig</a>
 
-                            <form class="inline-block" action="{{ route('accounts.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze leraar wil verwijderen?');">
+                            <form class="inline-block" action="{{ route('accounts.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
                                 @csrf
                                 @method('DELETE')
                                 <input type="submit" class="text-red-600 hover:text-red-900 bg-transparent" value="Verwijder">
