@@ -21,7 +21,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('accounts.update', $user->id) }}" method="POST">
+            <form action="{{ route('admin.accounts.update', $user->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="role_id" value="{{$user->role_id}}">

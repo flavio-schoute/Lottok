@@ -6,8 +6,9 @@
                     {{ __('Account overzicht') }}
                 </h2>
 
-                <div class="container bg-white p-0 pb-5 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
-                @if (session('success'))
+                <div
+                    class="container bg-white p-0 pb-5 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
+                    @if (session('success'))
                         <div class="bg-green-600 w-full h-20 flex items-center justify-center">
                             <ul class="text-xl text-white text-center">
                                 <li>{{ session('success') }}</li>
@@ -31,50 +32,54 @@
                         </div>
                     @endif
                     <table class="border border-gray-400 mt-10">
-                      <tr class="text-left border-b border-gray-400">
-                        <th class="p-2 border-l border-gray-200">Voornaam</th>
-                        <th class="p-2 border-l border-gray-200">Achternaam</th>
-                        <th class="p-2 border-l border-gray-200">Geboortedatum</th>
-                        <th class="p-2 border-l border-gray-200">Email</th>
-                        <th class="p-2 border-l border-gray-200">Rol</th>
-                        <th class="p-2 border-l border-gray-200">Credits</th>
-                        <th class="p-2 border-l border-gray-200">Acties</th>
-                        <th class="p-2 border-l border-gray-200">Blokkeren</th>
-                      </tr>
-                      @foreach($users as $user)
-                      <tr class="border-b border-gray-400">
-                        <td class="p-2">{{ $user->first_name }}</td>
-                        <td class="p-2 border-l border-gray-200">{{ $user->last_name }}</td>
-                        <td class="p-2 border-l border-gray-200">{{ $user->birth_date }}</td>
-                        <td class="p-2 border-l border-gray-200">{{ $user->email }}</td>
-                        <td class="p-2 border-l border-gray-200">
-                        @if($user->is_admin == 1)
-                            Admin
-                        @else
-                            Klant
-                        @endif
-                        </td>
-                        <td class="p-2 border-l border-gray-200">€{{ $user->credits }}</td>
-                        <td class="p-2 border-l border-gray-200">
+                        <tr class="text-left border-b border-gray-400">
+                            <th class="p-2 border-l border-gray-200">Voornaam</th>
+                            <th class="p-2 border-l border-gray-200">Achternaam</th>
+                            <th class="p-2 border-l border-gray-200">Geboortedatum</th>
+                            <th class="p-2 border-l border-gray-200">Email</th>
+                            <th class="p-2 border-l border-gray-200">Rol</th>
+                            <th class="p-2 border-l border-gray-200">Credits</th>
+                            <th class="p-2 border-l border-gray-200">Acties</th>
+                            <th class="p-2 border-l border-gray-200">Blokkeren</th>
+                        </tr>
+                        @foreach($users as $user)
+                            <tr class="border-b border-gray-400">
+                                <td class="p-2">{{ $user->first_name }}</td>
+                                <td class="p-2 border-l border-gray-200">{{ $user->last_name }}</td>
+                                <td class="p-2 border-l border-gray-200">{{ $user->birth_date }}</td>
+                                <td class="p-2 border-l border-gray-200">{{ $user->email }}</td>
+                                <td class="p-2 border-l border-gray-200">
+                                    @if($user->is_admin == 1)
+                                        Admin
+                                    @else
+                                        Klant
+                                    @endif
+                                </td>
+                                <td class="p-2 border-l border-gray-200">€{{ $user->credits }}</td>
+                                <td class="p-2 border-l border-gray-200">
 
-                            <a href="{{ route('accounts.edit', $user->id) }}" class="text-blue-500 pr-5">Wijzig</a>
+                                    <a href="{{ route('admin.accounts.edit', $user->id) }}"
+                                       class="text-blue-500 pr-5">Wijzig</a>
 
-                            <form class="inline-block" action="{{ route('accounts.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
-                                @csrf
-                                @method('DELETE')
-                                <input type="submit" class="text-red-600 hover:text-red-900 bg-transparent" value="Verwijder">
-                            </form>
+                                    <form class="inline-block" action="{{ route('admin.accounts.destroy', $user->id) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="submit" class="text-red-600 hover:text-red-900 bg-transparent"
+                                               value="Verwijder">
+                                    </form>
 
-                        </td>
-                        <td class="p-2 border-l border-gray-200">
-                            @if($user->is_active == 1)
-                                <input type="checkbox">
-                            @else
-                                <input checked type="checkbox">
-                            @endif
-                        </td>
-                      </tr>
-                      @endforeach
+                                </td>
+                                <td class="p-2 border-l border-gray-200">
+                                    @if($user->is_active == 1)
+                                        <input type="checkbox">
+                                    @else
+                                        <input checked type="checkbox">
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </table>
                     <div class="my-3">
                         {{ $users->links() }}
