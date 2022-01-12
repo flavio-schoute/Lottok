@@ -23,6 +23,14 @@
                     <x-jet-nav-link href="{{ route('cashout.index') }}" :active="request()->routeIs('cashout.index')">
                         {{ __('Geld uitcashen') }}
                     </x-jet-nav-link>
+
+                    <x-jet-nav-link href="{{ route('accounts.index') }}" :active="request()->routeIs('accounts.index')">
+                        {{ __('Account overzicht') }}
+                    </x-jet-nav-link>
+
+                    <x-jet-nav-link href="{{ route('statistic.index') }}" :active="request()->routeIs('statistic.index')">
+                        {{ __('Statistieken') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 
