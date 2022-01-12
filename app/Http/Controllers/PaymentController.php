@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentRequest;
+use App\Services\LottokPaymentService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,7 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
-use Stripe\Exception\ApiErrorException;
 
 class PaymentController extends Controller
 {
@@ -42,7 +42,7 @@ class PaymentController extends Controller
      * @param PaymentRequest $request
      * @return Application|Redirector|RedirectResponse
      */
-    public function store(PaymentRequest $request)
+    public function store(PaymentRequest $request): Redirector|RedirectResponse|Application
     {
         try {
             // Get the requested amount, convert to string and then in a number
@@ -50,41 +50,8 @@ class PaymentController extends Controller
             $stringAmount = implode("", $requestedAmount);
             $amount = floatval($stringAmount);
 
-            // Get the customer and the currency
-            $customer = Customer::retrieve(auth()->user()->stripe_id);
-            $currency = config('cashier.currency');
-
-            // The url the user will be redirected to if the payment succeed or canceled
-            $returnUrl = redirect()->route('pay.index')->getTargetUrl();
-
-            $unitAmount = $amount * 100;
-
-            // Checkout session
-            $session = Session::create([
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => $currency,
-                        'product_data' => [
-                            'name' => 'Credits Lottok',
-                        ],
-                        'unit_amount' => $unitAmount,
-                    ],
-                    'quantity' => 1,
-                ]],
-                'payment_method_types' => ['ideal'],
-                'metadata' => [
-                    'product' => 'Credit Lottok'
-                ],
-                'mode' => 'payment',
-                'customer' => $customer,
-                'billing_address_collection' => 'required',
-                'phone_number_collection' => [
-                    'enabled' => true
-                ],
-                'submit_type' => 'pay',
-                'success_url' => $returnUrl . '?succes=true&amount=' . $unitAmount,
-                'cancel_url' => $returnUrl
-            ]);
+            // Handle payment in the service class
+            $session = (new LottokPaymentService())->pay($amount, auth()->user()->stripe_id);
 
             // Redirect to the hosted Stripe page to handle the payment
             return redirect($session->url, 303);

@@ -103,31 +103,22 @@
     @push('pay-script')
         @once
             <script>
-                // Credits to Reinout Wijnholds (StackOverFlow)
-                function onlyOne(checkbox) {
-                    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                    let textFieldInput = document.getElementById('other-amount');
-                    checkboxes.forEach((item) => {
-                        if (item !== checkbox) item.checked = false
-                        textFieldInput.innerText = "";
-                    })
-                }
-
-                let boxes = document.querySelectorAll('input[type="checkbox"]');
+                let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
                 let textFieldInput = document.getElementById('other-amount');
 
-                for(let box of boxes) {
-                    box.addEventListener('change', function() {
-                        textFieldInput.disabled = box.checked;
+                // Credits to Reinout Wijnholds (StackOverFlow)
+                function onlyOne(checkbox) {
+                    checkBoxes.forEach((item) => {
+                        if (item !== checkbox) item.checked = false
                     })
                 }
 
-                textFieldInput.addEventListener('change', function () {
-                    for (let box of boxes) {
-                        box.disabled = !box.disabled;
-                    }
-                });
-
+                for(let box of checkBoxes) {
+                    box.addEventListener('change', function() {
+                        textFieldInput.disabled = box.checked;
+                        textFieldInput.value = "";
+                    })
+                }
             </script>
         @endonce
     @endpush

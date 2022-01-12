@@ -25,21 +25,21 @@ class PaymentRequest extends FormRequest
     {
         return [
             'amount-5' => [
-//                'sometimes',
+                'sometimes',
                 'integer'
             ],
             'amount-10' => [
-//                'sometimes',
+                'sometimes',
                 'integer'
             ],
             'amount-20' => [
-//                'sometimes',
+                'sometimes',
                 'integer'
             ],
 
             'other-amount' => [
-//                'sometimes',
-//                'exclude_if:other-amount,null'
+                'sometimes',
+                'exclude_if:other-amount,null',
             ]
         ];
     }
