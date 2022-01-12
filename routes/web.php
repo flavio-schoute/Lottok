@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\CashoutController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GambleController;
 use App\Http\Controllers\AccountsController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +26,14 @@ Route::redirect('/', '/login');
 Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
-    
+
     //Route::get('/gamble', [GambleController::class, 'index'])->name('gamble');
 
     Route::resource('gamble', GambleController::class);
 
+    Route::resource('statistic', StatisticsController::class);
     // Route::resource('game', GameController::class);
-    
     Route::resource('accounts', AccountsController::class);
+    Route::resource('pay', PaymentController::class);
+    Route::resource('cashout', CashoutController::class);
 });

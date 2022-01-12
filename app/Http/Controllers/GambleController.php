@@ -59,7 +59,7 @@ class GambleController extends Controller
 
         $userNewCredits = auth()->user()->credits - $gambleValidation['chosen_money'];
 
-        User::query()->update(['credits' => $userNewCredits]);
+        User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
 
         Gamble::create([
             'team_id' => $gambleValidation['chosen_team'],
