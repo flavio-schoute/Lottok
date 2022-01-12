@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CashoutRequest;
 use App\Models\User;
+use App\Services\CashoutService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -43,46 +44,26 @@ class CashoutController extends Controller
      */
     public function store(CashoutRequest $request): RedirectResponse
     {
-        // TODO: Add iban or something?
+        // Handle real life bank account details, like getting the bank account number etc. or in this case it is already fixed, and we have it
+        // Processing...
 
         // Get the amount and convert it to float
         $amount = $request->safe()->only('amount');
         $amount = floatval($amount['amount']);
 
-        // If the amount is less than 20 euro we redirect the user back with error message
-        if ($amount < 20) {
-            return redirect()->back(303)->withErrors(['cashout_error_less_than_20_euro' => 'Het minimale bedrag moet 20 euro zijn.']);
+        try {
+            $credits = (new CashoutService())->handleCashout($amount);
+        } catch (\Exception $exception) {
+            return redirect()->back(303)->withErrors(['cashout_errors' => $exception->getMessage()]);
         }
-
-        $userCredits = auth()->user()->credits;
-
-        // Calculate tax for the owner and insert it into the database
-        $cashoutTax = $amount / 100 * 7;
-
-        DB::table('cashout_customers')->insert([
-            'user_id' => auth()->user()->id,
-            'tax_credits' => $cashoutTax,
-            'cashout_date' => Carbon::now()
-        ]);
-
-        // Calculate new user credits
-        $amount = $amount - $cashoutTax;
-        $newUserCredits = $userCredits - $amount;
-
-        // Check if the new calculated credits is not less than 0 if so, return with error message
-        if ($newUserCredits < 0) {
-            return redirect()->back(303)->withErrors(['cashout_error_less_than_0_euro' => 'Je hebt niet genoeg credits.']);
-        }
-
-
 
         // Update the user credits and return
-        User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $newUserCredits]);
+        User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $credits]);
 
         // Handle real life bank process to add cash to the bank of the user
         // ...
 
-        return redirect()->route('cashout.index')->with('success', 'Uitbetaling is gelukt!');
+        return redirect()->route('cashout.index')->with('success', 'Uitbetaling is gelukt! Het kan 3 tot 5 werkdagen duren.');
     }
 
     /**

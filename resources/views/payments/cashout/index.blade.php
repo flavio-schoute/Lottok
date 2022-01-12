@@ -38,6 +38,7 @@
 
                 <div class="text-xl text-gray-700 font-semibold mt-5">
                     <p>Typ het bedrag waarmee je wilt uitcashen! <span class="capitalize">let op:</span> minimale bedrag is 20 euro.</p>
+                    <p class="mt-1"><span class="capitalize">let op:</span> er worden 7% kosten over je uitbetaling berekend.</p>
                 </div>
 
                 <form action="{{ route('cashout.store') }}" method="POST" class="mt-5">

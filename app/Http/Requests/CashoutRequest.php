@@ -25,9 +25,17 @@ class CashoutRequest extends FormRequest
     {
         return [
             'amount' => [
-                'required'
-            ]
+                'required',
+            ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'amount.required' => 'Een bedrag is verplicht. Let op: minimaal 20 euro.'
+        ];
+    }
+
 
 }
