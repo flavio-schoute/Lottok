@@ -7,7 +7,6 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GambleController;
 use App\Http\Controllers\AccountsController;
-use App\Http\Controllers\GameController;
 use App\Http\Controllers\StatisticsController;
 
 /*
