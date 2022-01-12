@@ -40,7 +40,7 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param PaymentRequest $request
-     * @return Application|Redirector|RedirectResponse|void
+     * @return Application|Redirector|RedirectResponse
      */
     public function store(PaymentRequest $request)
     {
@@ -89,7 +89,7 @@ class PaymentController extends Controller
             // Redirect to the hosted Stripe page to handle the payment
             return redirect($session->url, 303);
 
-        } catch (ApiErrorException $e) {
+        } catch (\Exception $e) {
             return redirect()->route('pay.index')->withErrors(['payment_error' => $e->getMessage()]);
         }
     }

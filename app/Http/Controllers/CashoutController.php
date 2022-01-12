@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CashoutRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class CashoutController extends Controller
 {
@@ -54,12 +56,25 @@ class CashoutController extends Controller
 
         $userCredits = auth()->user()->credits;
 
+        // Calculate tax for the owner and insert it into the database
+        $cashoutTax = $amount / 100 * 7;
+
+        DB::table('cashout_customers')->insert([
+            'user_id' => auth()->user()->id,
+            'tax_credits' => $cashoutTax,
+            'cashout_date' => Carbon::now()
+        ]);
+
+        // Calculate new user credits
+        $amount = $amount - $cashoutTax;
         $newUserCredits = $userCredits - $amount;
 
         // Check if the new calculated credits is not less than 0 if so, return with error message
         if ($newUserCredits < 0) {
             return redirect()->back(303)->withErrors(['cashout_error_less_than_0_euro' => 'Je hebt niet genoeg credits.']);
         }
+
+
 
         // Update the user credits and return
         User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $newUserCredits]);

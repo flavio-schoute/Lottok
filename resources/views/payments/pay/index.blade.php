@@ -49,7 +49,7 @@
                                 </div>
 
                                 <label class="flex justify-center" for="amount-5">
-                                    <input name="amount-5" readonly value="5"  id="boxes" class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
+                                    <input name="amount-5" readonly value="5"  id="boxes" onclick="onlyOne(this)" class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
                                 </label>
                             </div>
 
@@ -62,7 +62,7 @@
                                 </div>
 
                                 <label class="flex justify-center" for="amount-10">
-                                    <input name="amount-10" id="boxes" readonly value="10" class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
+                                    <input name="amount-10" id="boxes" readonly value="10" onclick="onlyOne(this)" class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
                                 </label>
                             </div>
 
@@ -76,7 +76,7 @@
 
 
                                 <label class="flex justify-center" for="amount-20">
-                                    <input name="amount-20" value="20"  id="boxes" readonly class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
+                                    <input name="amount-20" value="20"  id="boxes" readonly onclick="onlyOne(this)" class="text-indigo-500 w-8 h-8 focus:ring-indigo-400 focus:ring-opacity-25 border border-gray-300 rounded" type="checkbox" />
                                 </label>
                             </div>
                         </div>
@@ -99,19 +99,34 @@
         </div>
     </div>
 
+    {{--  We write the script here because if we do it in main JS file, the script will be in every page and that is not what we want  --}}
     @push('pay-script')
         @once
             <script>
-                let boxes = document.querySelectorAll('#boxes');
+                // Credits to Reinout Wijnholds (StackOverFlow)
+                function onlyOne(checkbox) {
+                    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    let textFieldInput = document.getElementById('other-amount');
+                    checkboxes.forEach((item) => {
+                        if (item !== checkbox) item.checked = false
+                        textFieldInput.innerText = "";
+                    })
+                }
+
+                let boxes = document.querySelectorAll('input[type="checkbox"]');
                 let textFieldInput = document.getElementById('other-amount');
 
-                boxes.addEventListener('onchange', function() {
-                    textFieldInput.disabled = !boxes.checked;
-                })
+                for(let box of boxes) {
+                    box.addEventListener('change', function() {
+                        textFieldInput.disabled = box.checked;
+                    })
+                }
 
-                // document.querySelector('#boxes').onchange = function() {
-                //     document.getElementById('other-amount').disabled = !this.checked;
-                // };
+                textFieldInput.addEventListener('change', function () {
+                    for (let box of boxes) {
+                        box.disabled = !box.disabled;
+                    }
+                });
 
             </script>
         @endonce

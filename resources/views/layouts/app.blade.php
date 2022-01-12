@@ -19,8 +19,6 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
 
 
-        @stack('pay-script')
-
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
@@ -46,5 +44,7 @@
         @stack('modals')
 
         @livewireScripts
+
+        @stack('pay-script')
     </body>
 </html>
