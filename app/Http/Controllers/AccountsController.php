@@ -76,6 +76,7 @@ class AccountsController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
+        //Finds the id from that user that you wants to delete
         $user = User::findOrFail($id);
         $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate');
         $user->update($userValidation);

@@ -43,9 +43,8 @@
 
                 <div class="mt-4">
                     <x-jet-label for="birthdate" value="{{ __('Geboortedatum') }}"/>
-                    <x-jet-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate"/>
+                    <x-jet-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('d/m/Y', strtotime($user->birth_date))"/>
                 </div>
-
 
                 <div class="flex items-center justify-center mt-4">
                     <x-jet-button>

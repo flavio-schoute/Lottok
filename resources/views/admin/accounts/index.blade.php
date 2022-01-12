@@ -6,8 +6,31 @@
                     {{ __('Account overzicht') }}
                 </h2>
 
-                <div class="container bg-white p-0 pb-5 pt-10 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
-                    <table class="border border-gray-400">
+                <div class="container bg-white p-0 pb-5 shadow-md border-2 mt-10 flex flex-col items-center justify-center">
+                @if (session('success'))
+                        <div class="bg-green-600 w-full h-20 flex items-center justify-center">
+                            <ul class="text-xl text-white text-center">
+                                <li>{{ session('success') }}</li>
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if ($errors->any() || session('failed'))
+                        <div class="bg-red-600 w-full h-20 flex flex-col items-center justify-center">
+                            <div class="font-xl text-white">{{ __('Oeps! Er is iets fout gegaan.') }}</div>
+                            <ul class="text-xl text-white text-center">
+                                @if(session('failed'))
+                                    <li>{{ session('failed') }}</li>
+                                @endif
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
+                    <table class="border border-gray-400 mt-10">
                       <tr class="text-left border-b border-gray-400">
                         <th class="p-2 border-l border-gray-200">Voornaam</th>
                         <th class="p-2 border-l border-gray-200">Achternaam</th>
@@ -31,7 +54,7 @@
                             Klant
                         @endif
                         </td>
-                        <td class="p-2 border-l border-gray-200">{{ $user->credits }}</td>
+                        <td class="p-2 border-l border-gray-200">€{{ $user->credits }}</td>
                         <td class="p-2 border-l border-gray-200">
 
                             <a href="{{ route('accounts.edit', $user->id) }}" class="text-blue-500 pr-5">Wijzig</a>
@@ -43,7 +66,13 @@
                             </form>
 
                         </td>
-                        <td class="p-2 border-l border-gray-200"><input type="checkbox"></td>
+                        <td class="p-2 border-l border-gray-200">
+                            @if($user->is_active == 1)
+                                <input type="checkbox">
+                            @else
+                                <input checked type="checkbox">
+                            @endif
+                        </td>
                       </tr>
                       @endforeach
                     </table>
