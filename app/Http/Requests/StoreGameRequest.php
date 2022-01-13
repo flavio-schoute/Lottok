@@ -13,7 +13,7 @@ class StoreGameRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,15 @@ class StoreGameRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'dropdown_team1' => [
+                'required',
+            ],
+            'dropdown_team2' => [
+                'required',
+            ],
+            'game-date' => [
+                'required',
+            ],
         ];
     }
 }
