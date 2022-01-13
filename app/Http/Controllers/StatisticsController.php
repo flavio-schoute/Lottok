@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Charts\StatisticChart;
 use App\Charts\StatisticBarChart;
+use App\Charts\StatisticUsersPieChart;
 
 
 class StatisticsController extends Controller
@@ -14,10 +15,12 @@ class StatisticsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(StatisticChart $incomechart, StatisticBarChart $topuserschart)
+    public function index(StatisticChart $incomechart, StatisticBarChart $userbarchart, StatisticUsersPieChart $topuserschart)
     {
-
-        return view('admin.statistic.index', ['incomechart' => $incomechart->build()], ['topuserschart' => $topuserschart->build()]);
+        return view('admin.statistic.index')
+        ->with('incomechart' , $incomechart->build())
+        ->with('userbarchart' , $userbarchart->build())
+        ->with('topuserschart' , $topuserschart->build());
     }
 
     /**

@@ -9,13 +9,18 @@
                 </h2>
 
                 <div class="container flex flex-col">
-
                     <div class="p-6 m-20 bg-white rounded shadow">
                         {!! $incomechart->container() !!}
                     </div>
                     <script src="{{ $incomechart->cdn() }}"></script>
                     {{ $incomechart->script() }}
 
+                    <div class="p-6 m-20 bg-white rounded shadow">
+                        {!! $userbarchart->container() !!}
+                    </div>
+                    <script src="{{ $userbarchart->cdn() }}"></script>
+                    {{ $userbarchart->script() }}
+                    
                     <div class="p-6 m-20 bg-white rounded shadow">
                         {!! $topuserschart->container() !!}
                     </div>
