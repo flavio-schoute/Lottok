@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Goal;
+use App\Models\Team;
+use App\Models\Gamble;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
-use Illuminate\Http\Request;
-use App\Models\Goal;
-use App\Models\Gamble;
-use Illuminate\Support\Facades\DB;
+
 class GameController extends Controller
 {
     /**
@@ -18,7 +20,11 @@ class GameController extends Controller
      */
     public function index(Game $game)
     {
-        //
+        $teams = Team::query()
+        ->selectRaw('*')
+        ->get();
+
+        return view('admin.game.index', compact('teams'));
     }
 
     /**
@@ -28,7 +34,7 @@ class GameController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -39,7 +45,16 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
-       
+        $gameValidation = $request->safe()->only('dropdown_team1','dropdown_team2', 'game-date');
+        $gamedate = date('Y-m-d H:i:s', strtotime($gameValidation['game-date']));
+
+        Game::create([
+            'team_id1' => $gameValidation['dropdown_team1'],
+            'team_id2' => $gameValidation['dropdown_team2'],
+            'game_date' => $gamedate,
+        ]);
+
+        return redirect()->back()->with('success', 'Wedstrijd aangemaakt!');
     }
 
     /**
