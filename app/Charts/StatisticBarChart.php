@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 
 class StatisticBarChart
@@ -16,26 +17,30 @@ class StatisticBarChart
 
     public function build(): \ArielMejiaDev\LarapexCharts\BarChart
     {
-        $topuser = User::query()
-            ->selectRaw('first_name, last_name, credits')
-            ->orderByRaw('credits DESC')
-            ->limit(5)
-            ->get();
+        // Todays year date
+        $currentYear = date('Y');
         
-        $fullname = [];
-        $credits = [];
-        foreach($topuser as $kv) {
-            array_push($fullname, $kv->first_name . " " . $kv->last_name);
-            array_push($credits, $kv->credits);
+        // Gets users out of database with the same month and counts them up
+        $users[] = DB::table('users')
+        ->select(DB::raw('MONTHNAME(DATE(created_at)) as date'), DB::raw('count(*) as views'))
+        ->whereYear('created_at','=',$currentYear)
+        ->groupBy('date')
+        ->orderBy('created_at','ASC')
+        ->get();
+
+        $count = [];
+        $month = [];
+        // In the foreach he puts everything in 2 seperate arrays
+        foreach($users[0] as $kv) {
+            array_push($count, $kv->views);
+            array_push($month, $kv->date);
         }
 
-    
-       // dd($topuser->toArray(), '...', $firstname);
-
+        // Returns the chart with given values
         return $this->chart->barChart()
-            ->setTitle('Beste gebruikers')
-            ->addData('Geld', $credits)
-            ->setXAxis($fullname);
+            ->setTitle('Geregistreerde gebruiker van het jaar '.$currentYear)
+            ->addData('Geld', $count)
+            ->setXAxis($month);
             
     }
 }
