@@ -24,13 +24,15 @@
                         {{ __('Geld uitcashen') }}
                     </x-jet-nav-link>
 
-                    <x-jet-nav-link href="{{ route('accounts.index') }}" :active="request()->routeIs('accounts.index')">
-                        {{ __('Account overzicht') }}
-                    </x-jet-nav-link>
+                    @if (auth()->user()->is_admin)
+                        <x-jet-nav-link href="{{ route('admin.accounts.index') }}" :active="request()->routeIs('accounts.index')">
+                            {{ __('Account overzicht') }}
+                        </x-jet-nav-link>
 
-                    <x-jet-nav-link href="{{ route('statistic.index') }}" :active="request()->routeIs('statistic.index')">
-                        {{ __('Statistieken') }}
-                    </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('admin.statistic.index') }}" :active="request()->routeIs('statistic.index')">
+                            {{ __('Statistieken') }}
+                        </x-jet-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -161,6 +163,24 @@
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
+
+            <x-jet-responsive-nav-link href="{{ route('pay.index') }}" :active="request()->routeIs('pay.index')">
+                {{ __('Geld storten') }}
+            </x-jet-responsive-nav-link>
+
+            <x-jet-responsive-nav-link href="{{ route('cashout.index') }}" :active="request()->routeIs('cashout.index')">
+                {{ __('Geld uitcashen') }}
+            </x-jet-responsive-nav-link>
+
+            @if (auth()->user()->is_admin)
+                <x-jet-responsive-nav-link href="{{ route('admin.accounts.index') }}" :active="request()->routeIs('admin.accounts.index')">
+                    {{ __('Account overzicht') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('admin.statistic.index') }}" :active="request()->routeIs('admin.statistic.index')">
+                    {{ __('Statistieken') }}
+                </x-jet-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

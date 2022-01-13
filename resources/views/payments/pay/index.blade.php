@@ -100,8 +100,8 @@
     </div>
 
     {{--  We write the script here because if we do it in main JS file, the script will be in every page and that is not what we want  --}}
-    @push('pay-script')
-        @once
+    @once
+        @push('pay-script')
             <script>
                 let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
                 let textFieldInput = document.getElementById('other-amount');
@@ -120,7 +120,7 @@
                     })
                 }
             </script>
-        @endonce
-    @endpush
+        @endpush
+    @endonce
 
 </x-app-layout>
