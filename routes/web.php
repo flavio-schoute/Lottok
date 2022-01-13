@@ -26,21 +26,19 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
 
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
-    //Route::get('/gamble', [GambleController::class, 'index'])->name('gamble');
-
+    Route::resource('games', GameController::class);
     Route::resource('gamble', GambleController::class);
 
     Route::resource('statistic', StatisticsController::class);
     Route::resource('accounts', AccountsController::class);
     Route::resource('pay', PaymentController::class);
     Route::resource('cashout', CashoutController::class);
-  
+
     Route::resource('pay', PaymentController::class);
     Route::resource('cashout', CashoutController::class);
 
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('statistic', StatisticsController::class);
         Route::resource('accounts', AccountsController::class);
-        Route::resource('games', GameController::class);
     });
 });
