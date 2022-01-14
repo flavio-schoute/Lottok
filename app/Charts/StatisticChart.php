@@ -19,9 +19,9 @@ class StatisticChart
     {
         $currentYear = date('Y');
         $credits = DB::table('cashout_customers')
-            ->selectRaw('sum(tax_credits) as tax_credits, month(cashout_date) AS month_name')
+            ->selectRaw('sum(tax_credits) as tax_credits, monthname(cashout_date) AS month_name')
             ->whereYear('cashout_date','=',$currentYear)
-            ->groupByRaw('month(cashout_date)')
+            ->groupByRaw('2')
             ->orderBy('cashout_date', 'ASC')
             ->get();
 
