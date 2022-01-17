@@ -16,8 +16,8 @@ class CreateGamblesTable extends Migration
         Schema::create('gambles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('game_id')->constrained();
-            $table->foreignId('team_id')->constrained();
+            $table->unsignedInteger('game_id');
+            $table->unsignedInteger('team_id');
             $table->unsignedDouble('bet_credit');
             $table->timestamps();
         });

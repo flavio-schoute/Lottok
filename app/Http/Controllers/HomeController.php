@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index(): RedirectResponse
     {
-        return redirect()->route('gamble.index');
+        return redirect()->route('games.index');
     }
 
     /**

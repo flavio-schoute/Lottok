@@ -20,9 +20,9 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        WebhookReceived::class => [
-            StripeEventListener::class,
-        ],
+//        'stripe-webhooks::checkout.session.completed' => [
+//            StripeEventListener::class
+//        ],
     ];
 
     /**

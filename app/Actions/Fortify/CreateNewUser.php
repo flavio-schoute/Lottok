@@ -30,7 +30,7 @@ class CreateNewUser implements CreatesNewUsers
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'birth_date' => ['required', 'date_format:Y-m-d', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
+            'birth_date' => ['required', 'date_format:Y-m-d', 'before_or_equal:' . Carbon::now()->subYears(18)->format('Y-m-d')],
         ])->validate();
 
         $user = User::create([
@@ -45,12 +45,7 @@ class CreateNewUser implements CreatesNewUsers
             'current_guess_streak' => 0,
         ]);
 
-        $stripeCustomer = $user->createAsStripeCustomer();
-        $stripeCustomerId = $stripeCustomer->id;
-
-        // Maybe delete this
-        $stripeUser = Cashier::findBillable($stripeCustomerId);
-        $stripeUser->applyBalance(500, 'Registratie bonus');
+        $user->createAsStripeCustomer();
 
         return $user;
     }

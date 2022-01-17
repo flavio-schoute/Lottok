@@ -64,9 +64,9 @@ class AccountsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(int $id): View|Factory|Application
     {
         $user = User::findOrFail($id);
         return view('admin.accounts.edit', compact('user'));
@@ -75,16 +75,17 @@ class AccountsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param UserUpdateRequest $request
+     * @param int $id
+     * @return Application|Factory|View
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, int $id): Application|Factory|View
     {
-        //Finds the id from that user that you wants to delete
+        // Finds the id from that user that you want to delete
         $user = User::findOrFail($id);
         $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate');
         $user->update($userValidation);
+
         return view('admin.accounts.index');
     }
 

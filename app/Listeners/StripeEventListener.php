@@ -7,28 +7,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Queue\InteractsWithQueue;
 use Laravel\Cashier\Events\WebhookReceived;
+use Spatie\WebhookClient\Models\WebhookCall;
 
 class StripeEventListener
 {
     /**
      * Handle the event.
      *
-     * @param WebhookReceived $event
+     * @param WebhookCall $webhookCall
      * @return RedirectResponse
      */
-    public function handle(WebhookReceived $event): RedirectResponse
+    public function handle(WebhookCall $webhookCall): RedirectResponse
     {
-        if ($event->payload['type'] === 'checkout.session.completed') {
-            $session = $event->data->object;
+        $unitAmount = $webhookCall['data']['unit_amount'];
 
-            $payedCreditsAmount = $session->unit_amount;
-            $newUserCredits = auth()->user()->credits += $payedCreditsAmount;
+        $payedCreditsAmount = $unitAmount / 100;
+        $newUserCredits = auth()->user()->credits += $payedCreditsAmount;
 
-            User::query()->update(['credits' => $newUserCredits]);
-
-            return redirect()->route('pay.index')->with('succes', 'Je betaling van '. $payedCreditsAmount . ' is geslaagd!');
-        }
-
-        return redirect()->route('pay.index')->withErrors(['payment_error_webhook' => 'Er ging iets mis met de betaling, neem contact op!']);
+        User::query()->update(['credits' => $newUserCredits]);
     }
 }
