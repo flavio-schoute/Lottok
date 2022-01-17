@@ -30,7 +30,7 @@ class StoreGameRequest extends FormRequest
             'dropdown_team2' => [
                 'required',
             ],
-            'game-date' => [
+            'gamble-date' => [
                 'required',
             ],
         ];

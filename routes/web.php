@@ -26,7 +26,10 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
 
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
+    // List of all the games and create a gamble
     Route::resource('games', GameController::class);
+
+    // The gamble itself
     Route::resource('gamble', GambleController::class);
 
     Route::resource('statistic', StatisticsController::class);
@@ -42,3 +45,6 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
         Route::resource('accounts', AccountsController::class);
     });
 });
+
+Route::stripeWebhooks('stripe-webhook');
+

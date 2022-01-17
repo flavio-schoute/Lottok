@@ -7,12 +7,14 @@ use App\Http\Requests\UpdateGambleRequest;
 use App\Models\Gamble;
 use App\Models\User;
 use App\Models\Game;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class GambleController extends Controller
 {
@@ -51,11 +53,29 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request): RedirectResponse
     {
-        if(auth()->user()->credits < 5) return redirect()->back()->with('failed', 'Je moet minimaal 5 euro op je account hebben!');
-
         $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'game_id');
 
-        if($gambleValidation['chosen_money'] > auth()->user()->credits) return redirect()->back()->with('failed', 'Je gekozen bedrag is groter dan wat op account staat!');
+        // Get the game data
+        $apiUrl = config('api.base_url');
+        $apiResponse = Http::acceptJson()->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->get($apiUrl . '/games/' . $gambleValidation['game_id']);
+
+        $game = json_decode($apiResponse);
+
+        $timeBeforeMatch = Carbon::parse($game->data->game_date)->subMinutes(15);
+
+        if ($timeBeforeMatch->isPast()) {
+            return redirect()->back()->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
+        }
+
+        if(auth()->user()->credits < 5) {
+            return redirect()->back()->withErrors('Je moet minimaal 5 euro op je account hebben!');
+        }
+
+        if($gambleValidation['chosen_money'] > auth()->user()->credits) {
+            return redirect()->back()->withErrors('Je gekozen bedrag is groter dan wat op account staat!');
+        }
 
         $userNewCredits = auth()->user()->credits - $gambleValidation['chosen_money'];
 
@@ -75,33 +95,38 @@ class GambleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $id
-     * @return Application|Factory|View
+     * @param int $id
+     * @return Application|Factory|View|RedirectResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
+        $apiUrl = config('api.base_url');
         $game = Game::findOrFail($id);
-        $games = Game::query()
-            ->selectRaw('team1.id as teamid1, team2.id as teamid2, team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score, game_date')
-            ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-            ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-            ->where('games.id', '=', $game->id)
-            ->get();
-        $gameid = $game->id;
 
-        $gambles = DB::table('gambles')
-            ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
-            ->join('teams', 'gambles.team_id', '=', 'teams.id')
-            ->where('gambles.game_id', '=', $gameid)
-            ->groupBy("gambles.team_id","name")
-            ->get();
+        $apiResponse = Http::acceptJson()->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->get($apiUrl . '/games/' . $game->id);
 
-        $user_gamble = Gamble::query()
-            ->where('game_id', '=', $gameid)
-            ->where('user_id', '=', auth()->user()->id)
-            ->count();
+        $games = json_decode($apiResponse);
 
-        return view('game.index', compact('games','gameid', 'gambles','user_gamble'));
+        $timeBeforeMatch = Carbon::parse($games->data->game_date)->subMinutes(15);
+
+        if ($timeBeforeMatch->isPast()) {
+            return redirect()->route('games.index')->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
+        }
+
+        $foundedGamble = Gamble::select('id')->where('user_id', auth()->user()->id)->where('game_id', $games->data->id)->get();
+
+
+        // TODO: Query people vote on the team
+//        $gambles = DB::table('gambles')
+//            ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
+//            ->join('teams', 'gambles.team_id', '=', 'teams.id')
+//            ->where('gambles.game_id', '=', $game->id)
+//            ->groupBy("gambles.team_id","name")
+//            ->get();
+
+        return view('gamble.index', compact(['games', 'foundedGamble' , 'timeBeforeMatch']));
     }
 
     /**
@@ -131,18 +156,39 @@ class GambleController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Gamble $gamble
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
-        $gamble = Game::findOrFail($id);
-        //Finds the id from that user that you wants to delete
-        $user = Gamble::query()
-        ->where('user_id', '=', auth()->user()->id)
-        ->where('game_id', '=', $gamble->id)
-        ->delete();
+        $gamble = Gamble::findOrFail($id);
 
-        //Redirects the user with message the user is deleted
+        // Get the current game
+        $apiUrl = config('api.base_url');
+        $apiResponse = Http::acceptJson()->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->get($apiUrl . '/games/' . $gamble->game_id);
+
+        $games = json_decode($apiResponse);
+
+        // Check if the user wants to delete their guess before the match start
+        $timeBeforeMatch = Carbon::parse($games->data->game_date)->subMinutes(15);
+        if ($timeBeforeMatch->isPast()) {
+            return redirect()->route('games.index')->withErrors('Je kan een kwartier voor de wedstrijd je gok niet meer annuleren.');
+        }
+
+        $credits = $gamble->bet_credit;
+
+        // Route model binding, this is an easy way to delete the gamble
+        // we just pass the ID of the gamble to this method
+        $gamble->delete();
+
+        // Give the credits back to the user
+        $currentCredits = auth()->user()->credits;
+        $userNewCredits = $currentCredits + $credits;
+
+        User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
+
+        // Redirects the user back with a succes message
         return redirect()->back()->with('success','De gok is verwijderd');
     }
 }
