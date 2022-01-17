@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Goal;
 use App\Models\Team;
 use App\Models\Gamble;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -28,28 +29,15 @@ class GameController extends Controller
      */
     public function index(): Application|Factory|View
     {
+        // TODO: Future paginate
+        // Get the all the games, normally you would like to paginate it, but we don't have time to do it
         $apiUrl = config('api.base_url');
 
         $apiResponse = Http::acceptJson()->withHeaders([
             'Content-Type' => 'application/json',
         ])->get($apiUrl . '/games');
 
-//        dd(json_decode($apiResponse));
-
         $games = json_decode($apiResponse);
-
-//        $data = $this->paginate($games);
-
-//        dd($data);
-
-//        $games = Game::query()
-//            ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score, game_date')
-//            ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-//            ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-//            ->orderBy('games.game_date')
-//            ->paginate(9);
-//
-//        dd($games);
 
         return view('dashboard', compact(['games']));
 
@@ -93,18 +81,11 @@ class GameController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Game $game
-     * @return Response
+     * @return void
      */
-    public function show(Game $game)
+    public function show()
     {
-        $games = DB::table('games')
-        ->select(DB::raw('team1.name AS name1, team2.name AS name2, games.game_date'))
-        ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-        ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-        ->where('games.id', '=', $game->id)
-        ->get();
-        return view('gamble.index', compact('games'));
+        //
     }
 
     /**
@@ -139,17 +120,5 @@ class GameController extends Controller
     public function destroy(Game $game)
     {
         //
-    }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    public function paginate($items, $perPage = 9, $page = null, $options = [])
-    {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentRequest;
+use App\Models\User;
 use App\Services\LottokPaymentService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,8 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Stripe\Checkout\Session;
-use Stripe\Customer;
 
 class PaymentController extends Controller
 {
@@ -52,6 +51,16 @@ class PaymentController extends Controller
 
             // Handle payment in the service class
             $session = (new LottokPaymentService())->pay($amount, auth()->user()->stripe_id);
+
+            // TODO: Future webhook handling credits update
+            // Normally you handle this in webhook, but the webhook isn't working
+            // Stripe support didn't know how to fix it. The webhook gives a status 200 but you get HTML doc with 503.
+            // Now we just update and the credits, this is a NOT DONE in real life
+            // See: https://gyazo.com/a54728843bee0eb3fb6afa0b445e42a2
+
+            $currentUserCredits = auth()->user()->credits;
+            $newUserCredits = $currentUserCredits + $amount;
+            User::query()->where('id', auth()->user()->id)->update(['credits' => $newUserCredits]);
 
             // Redirect to the hosted Stripe page to handle the payment
             return redirect($session->url, 303);
