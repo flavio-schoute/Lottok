@@ -22,7 +22,7 @@ class StatisticChart
             ->selectRaw('sum(tax_credits) as tax_credits, monthname(cashout_date) AS month_name')
             ->whereYear('cashout_date','=', $currentYear)
             ->groupByRaw('2')
-            ->orderBy('month_name', 'ASC')
+            ->orderBy('cashout_date', 'ASC')
             ->get();
 
         $month = [];
