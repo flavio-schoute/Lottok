@@ -21,18 +21,11 @@ class GambleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return void
      */
     public function index()
     {
-        $games = Game::query()
-            ->selectRaw('team1.name AS team_name1, team2.name AS team_name2, games.id, team1_score, team2_score, game_date')
-            ->join('teams AS team1', 'games.team_id1', '=', 'team1.id')
-            ->join('teams AS team2', 'games.team_id2', '=', 'team2.id')
-            ->orderBy('games.game_date')
-            ->paginate(9);
-
-        return view('dashboard', compact('games'));
+        //
     }
 
     /**
@@ -101,11 +94,10 @@ class GambleController extends Controller
     public function show(int $id)
     {
         $apiUrl = config('api.base_url');
-        $game = Game::findOrFail($id);
 
         $apiResponse = Http::acceptJson()->withHeaders([
             'Content-Type' => 'application/json',
-        ])->get($apiUrl . '/games/' . $game->id);
+        ])->get($apiUrl . '/games/' . $id);
 
         $games = json_decode($apiResponse);
 

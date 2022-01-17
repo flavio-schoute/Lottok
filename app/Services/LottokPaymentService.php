@@ -55,5 +55,4 @@ class LottokPaymentService
             'cancel_url' => $returnUrl
         ]);
     }
-
 }

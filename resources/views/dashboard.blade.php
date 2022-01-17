@@ -37,10 +37,6 @@
                             @endif
                     @endforeach
                 </div>
-
-                <div class="my-3">
-{{--                    {{ dd($games) }}--}}
-                </div>
             </div>
         </div>
     </div>

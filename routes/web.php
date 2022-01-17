@@ -46,5 +46,3 @@ Route::middleware(['auth', 'auth:sanctum', 'verified'])->prefix('dashboard')->gr
     });
 });
 
-Route::stripeWebhooks('stripe-webhook');
-
