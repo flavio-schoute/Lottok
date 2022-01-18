@@ -83,10 +83,16 @@ class AccountsController extends Controller
     {
         // Finds the id from that user that you want to delete
         $user = User::findOrFail($id);
-        $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate');
+        $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate', 'is_admin');
         $user->update($userValidation);
 
-        return view('admin.accounts.index');
+        $users = User::query()
+            ->select()
+            ->orderBy('is_admin', 'DESC')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(20);
+
+        return view('admin.accounts.index', compact('users'));
     }
 
     /**

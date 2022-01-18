@@ -1,13 +1,13 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex justify-center">
             <div class="overflow-hidden">
                 <h2 class="font-semibold md:text-5xl text-4xl text-indigo-800 leading-tight mb-10 sm:m-0 sm:mb-10 ml-5 mr-5">
-                    {{ __('Account wijzigen') }}
+                    {{ __('Wijzig account') }}
                 </h2>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="w-96 bg-white p-10 py-5 rounded-md">
 
             @if ($errors->any())
                 <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
@@ -45,6 +45,14 @@
                 <div class="mt-4">
                     <x-jet-label for="birthdate" value="{{ __('Geboortedatum') }}"/>
                     <x-jet-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('d/m/Y', strtotime($user->birth_date))"/>
+                </div>
+
+                <div class="mt-4">
+                    <x-jet-label for="is_admin" value="{{ __('Role') }}"/>
+                    <select class="w-full" name="is_admin">
+                        <option value="0">Klant</option>
+                        <option value="1">Admin</option>
+                    </select>
                 </div>
 
                 <div class="flex items-center justify-center mt-4">
