@@ -35,7 +35,7 @@
                 <div class="container bg-white p-0 pb-5 shadow-md border-1 mt-10 flex flex-col items-center justify-center">
 
                     <div class="mt-8 text-center">
-                        <h2 class="text-3xl font-bold">{{ $games->data->team_name1 }} VS {{ $games->data->team_name1 }}</h2>
+                        <h2 class="text-3xl font-bold">{{ $games->data->team_name1 }} VS {{ $games->data->team_name2 }}</h2>
                     </div>
 
                     <div class="mt-5 text-center">
