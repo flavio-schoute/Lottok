@@ -107,7 +107,7 @@ class GambleController extends Controller
             return redirect()->route('games.index')->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
         }
 
-        $foundedGamble = Gamble::select('id')->where('user_id', auth()->user()->id)->where('game_id', $games->data->id)->get();
+        $foundedGamble = Gamble::select(['id', 'bet_credit'])->where('user_id', auth()->user()->id)->where('game_id', $games->data->id)->get();
 
 
         // TODO: Query people vote on the team
