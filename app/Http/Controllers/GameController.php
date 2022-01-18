@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGameRequest;
+use App\Http\Requests\UpdateGameRequest;
 use App\Models\Game;
 use App\Models\Goal;
-use App\Models\Team;
-use App\Models\Gamble;
-use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreGameRequest;
-use App\Http\Requests\UpdateGameRequest;
 use Illuminate\Support\Facades\Http;
 
 class GameController extends Controller
@@ -40,42 +33,56 @@ class GameController extends Controller
         $games = json_decode($apiResponse);
 
         return view('dashboard', compact(['games']));
-
-//        $teams = Team::query()
-//        ->selectRaw('*')
-//        ->get();
-//
-//        return view('admin.gamble.index', compact('teams'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(): Application|Factory|View
     {
+        abort_if(!auth()->user()->is_admin, 403, 'Je hebt geen rechten om deze pagina te bezoeken.');
 
+        $apiUrl = config('api.base_url');
+
+        $apiResponse = Http::acceptJson()->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->get($apiUrl . '/teams');
+
+        $teams = json_decode($apiResponse);
+
+        return view('admin.game.create', compact('teams'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreGameRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(StoreGameRequest $request)
+    public function store(StoreGameRequest $request): RedirectResponse
     {
-        $gameValidation = $request->safe()->only('dropdown_team1','dropdown_team2', 'gamble-date');
-        $gamedate = date('Y-m-d H:i:s', strtotime($gameValidation['gamble-date']));
+        $gameValidation = $request->safe()->only('dropdown_team1','dropdown_team2', 'game-date');
+        $gameDate = date('Y-m-d H:i:s', strtotime($gameValidation['game-date']));
 
-        Game::create([
+        $apiUrl = config('api.base_url');
+
+        $apiResponse = Http::acceptJson()->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post($apiUrl . '/games', [
             'team_id1' => $gameValidation['dropdown_team1'],
             'team_id2' => $gameValidation['dropdown_team2'],
-            'game_date' => $gamedate,
+            'game_date' => $gameDate,
         ]);
 
-        return redirect()->back()->with('success', 'Wedstrijd aangemaakt!');
+//        dd($apiResponse);
+
+        if ($apiResponse->status() == 200) {
+            return redirect()->back()->with( 'success', 'Wedstrijd aangemaakt!');
+        }
+
+        return redirect()->back()->withErrors( 'Er ging iets fout!');
     }
 
     /**

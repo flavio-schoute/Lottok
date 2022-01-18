@@ -32,6 +32,10 @@
                         <x-jet-nav-link href="{{ route('admin.statistic.index') }}" :active="request()->routeIs('statistic.index')">
                             {{ __('Statistieken') }}
                         </x-jet-nav-link>
+
+                        <x-jet-nav-link href="{{ route('games.create') }}" :active="request()->routeIs('games.create')">
+                            {{ __('Wedstrijd aanmaken') }}
+                        </x-jet-nav-link>
                     @endif
                 </div>
             </div>
@@ -179,6 +183,10 @@
 
                 <x-jet-responsive-nav-link href="{{ route('admin.statistic.index') }}" :active="request()->routeIs('admin.statistic.index')">
                     {{ __('Statistieken') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('games.create') }}" :active="request()->routeIs('games.create')">
+                    {{ __('Wedstrijd aanmaken') }}
                 </x-jet-responsive-nav-link>
             @endif
         </div>
