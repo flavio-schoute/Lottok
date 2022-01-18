@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
 use App\Models\Game;
-use App\Models\Goal;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -22,6 +22,20 @@ class GameController extends Controller
      */
     public function index(): Application|Factory|View
     {
+        // Check if the user a gamble streak of 10, if so then give them a bonus and reset the streak
+        if (auth()->user()->current_guess_streak == 10) {
+            $currentUserCredits = auth()->user()->credits;
+            $newUserCredits = $currentUserCredits + 10;
+
+            User::query()->where('id', auth()->user()->id)->update([
+                'current_guess_streak' => 0,
+                'credits' => $newUserCredits
+            ]);
+
+            session()->flash('success', 'Je hebt een streak van 10 gehad, je krijgt nu een bonus!');
+        }
+
+
         // TODO: Future paginate
         // Get the all the games, normally you would like to paginate it, but we don't have time to do it
         $apiUrl = config('api.base_url');
