@@ -52,21 +52,20 @@
                         <form action="{{ route('gamble.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="game_id" value="{{ $games->data->id}}" readonly>
-
-                            <div class="mb-3">
-                                <x-jet-label for="chosen_team" value="{{ __('Selecteer het winnende team') }}" class="pb-2"></x-jet-label>
-                                <select name="chosen_team" id="chosen_team">
-                                    <option value="{{ $games->data->team_id1 }}">{{ $games->data->team_name1 }}</option>
-                                    <option value="{{ $games->data->team_id2 }}">{{ $games->data->team_name2 }}</option>
-                                </select>
-                            </div>
-
-                            <div class="mt-5">
-                                <x-jet-label for="chosen_team" value="{{ __('Selecteer gok bedrag') }}" class="pb-2"></x-jet-label>
-                                <x-jet-input id="chosen_team" class="block mt-1 w-full" type="text" name="chosen_money" :value="old('chosen_money')"></x-jet-input>
-                            </div>
-
                             @if ($foundedGamble->isEmpty())
+                                <div class="mb-3">
+                                    <x-jet-label for="chosen_team" value="{{ __('Selecteer het winnende team') }}" class="pb-2"></x-jet-label>
+                                    <select name="chosen_team" id="chosen_team">
+                                        <option value="{{ $games->data->team_id1 }}">{{ $games->data->team_name1 }}</option>
+                                        <option value="{{ $games->data->team_id2 }}">{{ $games->data->team_name2 }}</option>
+                                    </select>
+                                </div>
+
+                                
+                                    <x-jet-label for="chosen_team" value="{{ __('Selecteer gok bedrag') }}" class="pb-2"></x-jet-label>
+                                    <x-jet-input id="chosen_team" class="block mt-1 w-full" type="text" name="chosen_money" :value="old('chosen_money')"></x-jet-input>
+                                </div>
+
                                 <livewire:place-bet/>
                             @endif
 
@@ -74,6 +73,11 @@
                     </div>
 
                     @if (!$foundedGamble->isEmpty())
+                    <div class="mt-5 text-center">
+                        <h3 class="text-3xl my-5">Gegokt bedrag</h3>
+                        <h3 class="text-4xl my-5">€{{ $foundedGamble->first()->bet_credit }}</h3>
+                    </div>
+
                         <form action="{{ route('gamble.destroy', $foundedGamble->first()->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
