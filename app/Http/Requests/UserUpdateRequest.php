@@ -42,6 +42,9 @@ class UserUpdateRequest extends FormRequest
             'birthdate' => [
                 'date',
                 'date_format:Y-m-d'
+            ],
+            'is_admin' => [
+                'required',
             ]
         ];
     }
