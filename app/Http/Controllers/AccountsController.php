@@ -79,20 +79,14 @@ class AccountsController extends Controller
      * @param int $id
      * @return Application|Factory|View
      */
-    public function update(UserUpdateRequest $request, int $id): Application|Factory|View
+    public function update(UserUpdateRequest $request, int $id)
     {
         // Finds the id from that user that you want to delete
         $user = User::findOrFail($id);
         $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate', 'is_admin');
         $user->update($userValidation);
 
-        $users = User::query()
-            ->select()
-            ->orderBy('is_admin', 'DESC')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(20);
-
-        return view('admin.accounts.index', compact('users'));
+        return redirect()->route('admin.accounts.index')->with('success', 'Account gewijzigd!');
     }
 
     /**

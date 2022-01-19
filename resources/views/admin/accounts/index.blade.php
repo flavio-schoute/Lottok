@@ -7,7 +7,7 @@
                 </h2>
 
                 @if (session('success'))
-                    <div class="bg-green-600 w-full h-20 flex items-center justify-center">
+                    <div class="bg-green-600 w-full h-20 flex items-center justify-center mb-5">
                         <ul class="text-xl text-white text-center">
                             <li>{{ session('success') }}</li>
                         </ul>
