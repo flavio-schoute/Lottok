@@ -48,6 +48,13 @@ class GambleController extends Controller
     {
         $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'game_id');
 
+        // TODO: Bug fix, the money can get typed with , but it rounds up
+        $amount = floatval($gambleValidation['chosen_money']);
+
+        if ($amount < 1) {
+            return redirect()->back()->withErrors('Je moet minimaal 1 euro inzetten om te kunnen gokken!');
+        }
+
         // Get the game data
         $apiUrl = config('api.base_url');
         $apiResponse = Http::acceptJson()->withHeaders([
@@ -66,11 +73,11 @@ class GambleController extends Controller
             return redirect()->back()->withErrors('Je moet minimaal 5 euro op je account hebben!');
         }
 
-        if($gambleValidation['chosen_money'] > auth()->user()->credits) {
+        if($amount > auth()->user()->credits) {
             return redirect()->back()->withErrors('Je gekozen bedrag is groter dan wat op account staat!');
         }
 
-        $userNewCredits = auth()->user()->credits - $gambleValidation['chosen_money'];
+        $userNewCredits = auth()->user()->credits - $amount;
 
         User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
 
@@ -78,7 +85,7 @@ class GambleController extends Controller
             'team_id' => $gambleValidation['chosen_team'],
             'game_id' => $gambleValidation['game_id'],
             'user_id' => auth()->user()->id,
-            'bet_credit' => $gambleValidation['chosen_money'],
+            'bet_credit' => $amount,
         ]);
 
         return redirect()->back()->with('success', 'Gok geplaatst!');

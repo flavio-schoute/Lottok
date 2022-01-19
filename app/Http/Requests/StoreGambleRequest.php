@@ -11,7 +11,7 @@ class StoreGambleRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,13 +21,11 @@ class StoreGambleRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'chosen_money' => [
                 'required',
-                'numeric',
-                'min:1',
             ],
             'chosen_team' => [
                 'required',
@@ -35,6 +33,13 @@ class StoreGambleRequest extends FormRequest
             'game_id' => [
                 'required',
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'chosen_money.required' => 'Dit veld is verplicht anders kan je geen gok plaatsen.'
         ];
     }
 }

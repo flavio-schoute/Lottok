@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->date('birth_date');
             $table->string('password');
             $table->rememberToken();
-            $table->unsignedDouble('credits');
+            $table->unsignedFloat('credits');
             $table->boolean('is_admin');
             $table->boolean('is_active');
             $table->unsignedInteger('current_guess_streak');

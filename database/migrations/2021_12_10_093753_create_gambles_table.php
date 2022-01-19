@@ -18,7 +18,7 @@ class CreateGamblesTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->unsignedInteger('game_id');
             $table->unsignedInteger('team_id');
-            $table->unsignedDouble('bet_credit');
+            $table->unsignedFloat('bet_credit');
             $table->timestamps();
         });
     }
