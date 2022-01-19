@@ -39,7 +39,7 @@ class StatisticBarChart
         // Returns the chart with given values
         return $this->chart->barChart()
             ->setTitle('Geregistreerde gebruiker van het jaar '.$currentYear)
-            ->addData('Geld', $count)
+            ->addData('Gebruikers', $count)
             ->setXAxis($month);
             
     }
