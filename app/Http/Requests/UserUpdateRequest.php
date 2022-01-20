@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UserUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,9 +23,12 @@ class UserUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
+            'id' => [
+                'integer'
+            ],
             'first_name' => [
                 'required',
                 'max:255',
@@ -37,11 +42,13 @@ class UserUpdateRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
+                Rule::unique('users')->ignore($this->id),
                 'max:255',
             ],
-            'birthdate' => [
+            'birth_date' => [
                 'date',
-                'date_format:Y-m-d'
+                'date_format:Y-m-d',
+                'before_or_equal:' . Carbon::now()->subYears(18)->format('Y-m-d')
             ],
             'is_admin' => [
                 'required',

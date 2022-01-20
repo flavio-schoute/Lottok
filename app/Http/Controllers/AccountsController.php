@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -21,6 +22,7 @@ class AccountsController extends Controller
     {
         $users = User::query()
             ->select()
+            ->where('is_admin', 0)
             ->orderBy('is_admin', 'DESC')
             ->orderBy('created_at', 'DESC')
             ->paginate(20);
@@ -69,6 +71,9 @@ class AccountsController extends Controller
     public function edit(int $id): View|Factory|Application
     {
         $user = User::findOrFail($id);
+
+        abort_if($user->is_admin, 403, 'Een admin bewerken is niet mogelijk!');
+
         return view('admin.accounts.edit', compact('user'));
     }
 
@@ -77,13 +82,13 @@ class AccountsController extends Controller
      *
      * @param UserUpdateRequest $request
      * @param int $id
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
-    public function update(UserUpdateRequest $request, int $id)
+    public function update(UserUpdateRequest $request, int $id): RedirectResponse
     {
         // Finds the id from that user that you want to delete
         $user = User::findOrFail($id);
-        $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birthdate', 'is_admin');
+        $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birth_date', 'is_admin');
         $user->update($userValidation);
 
         return redirect()->route('admin.accounts.index')->with('success', 'Account gewijzigd!');
@@ -92,15 +97,15 @@ class AccountsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
-        //Finds the id from that user that you wants to delete
+        // Finds the id from that user that you want to delete
         $user = User::whereId($id)->delete();
 
-        //Redirects the user with message the user is deleted
-        return redirect()->back()->with('success','The user is deleted');
+        // Redirects the user with message the user is deleted
+        return redirect()->back()->with('success','De gebruiker is verwijderd');
     }
 }

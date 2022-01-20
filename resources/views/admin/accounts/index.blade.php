@@ -88,8 +88,7 @@
 
                                             <td class="px-6 py-4 whitespace-nowrap">&euro; {{ $user->credits }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('admin.accounts.edit', $user->id) }}"
-                                                   class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
+                                                <a href="{{ route('admin.accounts.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Wijzig</a>
 
                                                 <form class="inline-block"
                                                       action="{{ route('admin.accounts.destroy', $user->id) }}"

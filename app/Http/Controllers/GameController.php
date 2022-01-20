@@ -32,6 +32,7 @@ class GameController extends Controller
                 'credits' => $newUserCredits
             ]);
 
+
             session()->flash('success', 'Je hebt een streak van 10 gehad, je krijgt nu een bonus!');
         }
 
@@ -89,8 +90,6 @@ class GameController extends Controller
             'team_id2' => $gameValidation['dropdown_team2'],
             'game_date' => $gameDate,
         ]);
-
-//        dd($apiResponse);
 
         if ($apiResponse->status() == 200) {
             return redirect()->back()->with( 'success', 'Wedstrijd aangemaakt!');
