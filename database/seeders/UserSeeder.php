@@ -20,9 +20,10 @@ class UserSeeder extends Seeder
         });
 
         User::factory()->create([
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('password'),
-            'is_admin' => true
+            'email' => 'j.bode@lottok.com',
+            'password' => Hash::make('HstUe&836!'),
+            'is_admin' => true,
+            'credits' => 1000
         ])->each(function (User $user) {
             $user->createOrGetStripeCustomer();
         });
