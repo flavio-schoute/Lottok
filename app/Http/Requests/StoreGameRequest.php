@@ -35,4 +35,13 @@ class StoreGameRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'game-date.required' => 'Een wedstrijd datum is verplicht.'
+        ];
+    }
+
+
 }

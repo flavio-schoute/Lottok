@@ -22,7 +22,6 @@ class AccountsController extends Controller
     {
         $users = User::query()
             ->select()
-            ->where('is_admin', 0)
             ->orderBy('is_admin', 'DESC')
             ->orderBy('created_at', 'DESC')
             ->paginate(20);
@@ -71,8 +70,6 @@ class AccountsController extends Controller
     public function edit(int $id): View|Factory|Application
     {
         $user = User::findOrFail($id);
-
-        abort_if($user->is_admin, 403, 'Een admin bewerken is niet mogelijk!');
 
         return view('admin.accounts.edit', compact('user'));
     }

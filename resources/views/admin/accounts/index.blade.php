@@ -90,28 +90,32 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="{{ route('admin.accounts.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Wijzig</a>
 
-                                                <form class="inline-block"
-                                                      action="{{ route('admin.accounts.destroy', $user->id) }}"
-                                                      method="POST"
-                                                      onsubmit="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="submit"
-                                                           class="text-red-600 hover:text-red-900 bg-transparent"
-                                                           value="Verwijder">
-                                                </form>
+                                                @if (!$user->is_admin)
+                                                    <form class="inline-block"
+                                                          action="{{ route('admin.accounts.destroy', $user->id) }}"
+                                                          method="POST"
+                                                          onsubmit="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="submit"
+                                                               class="text-red-600 hover:text-red-900 bg-transparent"
+                                                               value="Verwijder">
+                                                    </form>
+                                                @endif
                                             </td>
 
 
                                             <td class="px-6 py-4 whitespace-nowrap">
 
-                                                @inject('injectedModel', 'App\Models\User')
+                                                @if (!$user->is_admin)
+                                                    @inject('injectedModel', 'App\Models\User')
 
-                                                <livewire:block-toggle-button
-                                                    :model="$injectedModel"
-                                                    field="is_active"
-                                                    userID="{{ $user->id }}"
-                                                />
+                                                    <livewire:block-toggle-button
+                                                        :model="$injectedModel"
+                                                        field="is_active"
+                                                        userID="{{ $user->id }}"
+                                                    />
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty

@@ -32,12 +32,11 @@ class GameController extends Controller
                 'credits' => $newUserCredits
             ]);
 
-
+            // This we display the message for 10 seconds or something
             session()->flash('success', 'Je hebt een streak van 10 gehad, je krijgt nu een bonus!');
         }
 
-
-        // TODO: Future paginate
+        // TODO: Future paginate & make a the call with Queues
         // Get the all the games, normally you would like to paginate it, but we don't have time to do it
         $apiUrl = config('api.base_url');
 
@@ -47,7 +46,7 @@ class GameController extends Controller
 
         $games = json_decode($apiResponse);
 
-        return view('dashboard', compact(['games']));
+        return view('dashboard', compact('games'));
     }
 
     /**
@@ -80,6 +79,10 @@ class GameController extends Controller
     {
         $gameValidation = $request->safe()->only('dropdown_team1','dropdown_team2', 'game-date');
         $gameDate = date('Y-m-d H:i:s', strtotime($gameValidation['game-date']));
+
+        if ($gameValidation['dropdown_team1'] == $gameValidation['dropdown_team2']) {
+            return redirect()->back()->withErrors( 'Selecteer 2 verschillende teams');
+        }
 
         $apiUrl = config('api.base_url');
 
