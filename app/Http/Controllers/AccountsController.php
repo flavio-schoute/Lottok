@@ -20,12 +20,13 @@ class AccountsController extends Controller
      */
     public function index(): Application|Factory|View
     {
+        //Retrieves users from database
         $users = User::query()
             ->select()
             ->orderBy('is_admin', 'DESC')
             ->orderBy('created_at', 'DESC')
             ->paginate(20);
-
+        //Teruns to page with users data
         return view('admin.accounts.index', compact('users'));
     }
 
@@ -69,8 +70,9 @@ class AccountsController extends Controller
      */
     public function edit(int $id): View|Factory|Application
     {
+        //Finds user id from person you want to edit
         $user = User::findOrFail($id);
-
+        //Returns to view with data
         return view('admin.accounts.edit', compact('user'));
     }
 
@@ -85,9 +87,11 @@ class AccountsController extends Controller
     {
         // Finds the id from that user that you want to delete
         $user = User::findOrFail($id);
+        //Validates the data that comes from view
         $userValidation = $request->safe()->only('first_name', 'last_name', 'email', 'birth_date', 'is_admin');
+        //Updates the user
         $user->update($userValidation);
-
+        //Redirects to page with message
         return redirect()->route('admin.accounts.index')->with('success', 'Account gewijzigd!');
     }
 

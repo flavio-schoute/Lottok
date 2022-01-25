@@ -77,15 +77,19 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request): RedirectResponse
     {
+        //Validates the given data
         $gameValidation = $request->safe()->only('dropdown_team1','dropdown_team2', 'game-date');
+        //Changes the format of the data for example 2022-25-01 to 25-01-2022
         $gameDate = date('Y-m-d H:i:s', strtotime($gameValidation['game-date']));
-
+        //Checkes if you haven't chosen the same team as team 1 or as team 2 if so give error.
         if ($gameValidation['dropdown_team1'] == $gameValidation['dropdown_team2']) {
             return redirect()->back()->withErrors( 'Selecteer 2 verschillende teams');
         }
 
+        //Configure api
         $apiUrl = config('api.base_url');
 
+        // Posts a new game into the API
         $apiResponse = Http::acceptJson()->withHeaders([
             'Content-Type' => 'application/json',
         ])->post($apiUrl . '/games', [
@@ -94,10 +98,12 @@ class GameController extends Controller
             'game_date' => $gameDate,
         ]);
 
+        // If OK return with message
         if ($apiResponse->status() == 200) {
             return redirect()->back()->with( 'success', 'Wedstrijd aangemaakt!');
         }
 
+        // Returns with error
         return redirect()->back()->withErrors( 'Er ging iets fout!');
     }
 

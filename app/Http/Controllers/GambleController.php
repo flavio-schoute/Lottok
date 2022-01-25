@@ -64,23 +64,23 @@ class GambleController extends Controller
         $game = json_decode($apiResponse);
 
         $timeBeforeMatch = Carbon::parse($game->data->game_date)->subMinutes(15);
-
+        // If the time before match has been pasted you can't place bet and get error
         if ($timeBeforeMatch->isPast()) {
             return redirect()->back()->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
         }
-
+        // Checks if user has atleast 5 euro on account
         if(auth()->user()->credits < 5) {
             return redirect()->back()->withErrors('Je moet minimaal 5 euro op je account hebben!');
         }
-
+        // Checks if enough money is on account
         if($amount > auth()->user()->credits) {
             return redirect()->back()->withErrors('Je gekozen bedrag is groter dan wat op account staat!');
         }
-
+        // Calculates new amount credits from user
         $userNewCredits = auth()->user()->credits - $amount;
-
+        // Updates the money from the user
         User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
-
+        // Stores data in database
         Gamble::create([
             'team_id' => $gambleValidation['chosen_team'],
             'game_id' => $gambleValidation['game_id'],
@@ -99,7 +99,8 @@ class GambleController extends Controller
      * @return Application|Factory|View|RedirectResponse
      */
     public function show(int $id)
-    {
+    {   
+        // Get the game data
         $apiUrl = config('api.base_url');
 
         $apiResponse = Http::acceptJson()->withHeaders([
@@ -109,11 +110,13 @@ class GambleController extends Controller
         $games = json_decode($apiResponse);
 
         $timeBeforeMatch = Carbon::parse($games->data->game_date)->subMinutes(15);
-
+        
+        //Checkes if time has pasted
         if ($timeBeforeMatch->isPast()) {
             return redirect()->route('games.index')->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
         }
 
+        // Finds the current gamble if made.
         $foundedGamble = Gamble::select(['id', 'bet_credit'])->where('user_id', auth()->user()->id)->where('game_id', $games->data->id)->get();
 
 
