@@ -46,8 +46,7 @@ class PaymentController extends Controller
         try {
             // Get the requested amount, convert to string and then in a number
             $requestedAmount = $request->validated();
-            $stringAmount = implode("", $requestedAmount);
-            $amount = floatval($stringAmount);
+            $amount = (new LottokPaymentService())->convertStringToFloat($requestedAmount);
 
             // Handle payment in the service class
             $session = (new LottokPaymentService())->pay($amount, auth()->user()->stripe_id);

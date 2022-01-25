@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CashoutRequest;
 use App\Models\User;
 use App\Services\CashoutService;
+use App\Services\LottokPaymentService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -47,11 +48,12 @@ class CashoutController extends Controller
         // Handle real life bank account details, like getting the bank account number etc. or in this case it is already fixed, and we have it
         // Processing...
 
-        // Get the amount and convert it to float
-        $amount = $request->safe()->only('amount');
-        $amount = floatval($amount['amount']);
-
         try {
+            // Get the amount and convert it to float
+            $amount = $request->safe()->only('amount');
+
+            $amount = (new LottokPaymentService())->convertStringToFloat($amount);
+
             $credits = (new CashoutService())->handleCashout($amount);
         } catch (\Exception $exception) {
             return redirect()->back(303)->withErrors(['cashout_errors' => $exception->getMessage()]);

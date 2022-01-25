@@ -12,6 +12,24 @@ class LottokPaymentService
     /**
      * @throws Exception
      */
+    public function convertStringToFloat(array $value): float
+    {
+
+        $value = implode("", $value);
+        $replacedValue = str_replace(',', '.', $value);
+
+        if (!is_numeric($replacedValue)) {
+            throw new Exception('Alleen cijfers zijn toegestaan!');
+        }
+
+        $amount = floatval($value);
+
+        return $amount;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function pay(float $amount, string $stripeCustomerId): Session
     {
         // If the amount is less than 20 euro we throw error message
