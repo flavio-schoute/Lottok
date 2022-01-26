@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="mt-5">
-                        <label for="other-amount" class="block text-sm font-medium text-gray-700">Ander bedrag</label>
+                        <label for="other-amount" class="block text-sm font-medium text-gray-700">Ander aantal credits:</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <input type="text" name="other-amount" id="other-amount"
                                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"

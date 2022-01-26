@@ -62,7 +62,7 @@
                                 </div>
 
                                 <div>
-                                    <x-jet-label for="chosen_team" value="{{ __('Selecteer gok bedrag') }}" class="pb-2"></x-jet-label>
+                                    <x-jet-label for="chosen_team" value="{{ __('Typ een gok bedrag') }}" class="pb-2"></x-jet-label>
                                     <x-jet-input id="chosen_team" class="block mt-1 w-full" type="text" name="chosen_money" :value="old('chosen_money')"></x-jet-input>
                                 </div>
 

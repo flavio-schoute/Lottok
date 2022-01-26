@@ -46,11 +46,13 @@ class GambleController extends Controller
      */
     public function store(StoreGambleRequest $request): RedirectResponse
     {
+        // Get the validated data
         $gambleValidation = $request->safe()->only('chosen_money','chosen_team', 'game_id');
 
         // TODO: Bug fix, the money can get typed with , but it rounds up
         $amount = floatval($gambleValidation['chosen_money']);
 
+        // Check if user put in more than 1 euro
         if ($amount < 1) {
             return redirect()->back()->withErrors('Je moet minimaal 1 euro inzetten om te kunnen gokken!');
         }
@@ -63,12 +65,21 @@ class GambleController extends Controller
 
         $game = json_decode($apiResponse);
 
+        // Get 15 minutes before the match and check that
         $timeBeforeMatch = Carbon::parse($game->data->game_date)->subMinutes(15);
+<<<<<<< Updated upstream
         // If the time before match has been pasted you can't place bet and get error
         if ($timeBeforeMatch->isPast()) {
             return redirect()->back()->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
         }
         // Checks if user has atleast 5 euro on account
+=======
+        if ($timeBeforeMatch->isPast()) {
+            return redirect()->back()->withErrors('Je kan een kwartier voor de wedstrijd niet meer gokken!');
+        }
+
+        // Check user credits
+>>>>>>> Stashed changes
         if(auth()->user()->credits < 5) {
             return redirect()->back()->withErrors('Je moet minimaal 5 euro op je account hebben!');
         }
@@ -76,11 +87,20 @@ class GambleController extends Controller
         if($amount > auth()->user()->credits) {
             return redirect()->back()->withErrors('Je gekozen bedrag is groter dan wat op account staat!');
         }
+<<<<<<< Updated upstream
         // Calculates new amount credits from user
         $userNewCredits = auth()->user()->credits - $amount;
         // Updates the money from the user
         User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
         // Stores data in database
+=======
+
+        // Subtract the credits and update the user credits
+        $userNewCredits = auth()->user()->credits - $amount;
+        User::query()->where('id', '=', auth()->user()->id)->update(['credits' => $userNewCredits]);
+
+        // Put the gamble in the database
+>>>>>>> Stashed changes
         Gamble::create([
             'team_id' => $gambleValidation['chosen_team'],
             'game_id' => $gambleValidation['game_id'],
@@ -89,7 +109,6 @@ class GambleController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Gok geplaatst!');
-
     }
 
     /**
@@ -98,9 +117,14 @@ class GambleController extends Controller
      * @param int $id
      * @return Application|Factory|View|RedirectResponse
      */
+<<<<<<< Updated upstream
     public function show(int $id)
     {   
         // Get the game data
+=======
+    public function show(int $id): View|Factory|RedirectResponse|Application
+    {
+>>>>>>> Stashed changes
         $apiUrl = config('api.base_url');
 
         $apiResponse = Http::acceptJson()->withHeaders([
@@ -118,15 +142,6 @@ class GambleController extends Controller
 
         // Finds the current gamble if made.
         $foundedGamble = Gamble::select(['id', 'bet_credit'])->where('user_id', auth()->user()->id)->where('game_id', $games->data->id)->get();
-
-
-        // TODO: Query people vote on the team
-//        $gambles = DB::table('gambles')
-//            ->select(DB::raw('COUNT(gambles.team_id) as aantal, teams.name AS name'))
-//            ->join('teams', 'gambles.team_id', '=', 'teams.id')
-//            ->where('gambles.game_id', '=', $game->id)
-//            ->groupBy("gambles.team_id","name")
-//            ->get();
 
         return view('gamble.index', compact(['games', 'foundedGamble' , 'timeBeforeMatch']));
     }
@@ -157,7 +172,7 @@ class GambleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Gamble $gamble
+     * @param int $id
      * @return RedirectResponse
      */
     public function destroy(int $id): RedirectResponse
@@ -180,8 +195,7 @@ class GambleController extends Controller
 
         $credits = $gamble->bet_credit;
 
-        // Route model binding, this is an easy way to delete the gamble
-        // we just pass the ID of the gamble to this method
+        // Delete the gamble
         $gamble->delete();
 
         // Give the credits back to the user

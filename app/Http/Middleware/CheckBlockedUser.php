@@ -17,9 +17,11 @@ class CheckBlockedUser
      */
     public function handle(Request $request, Closure $next)
     {
+        // Check user auth en check if the user is blocked
         if (auth()->check() && (auth()->user()->is_active == 0)) {
-            auth('web')->logout();
 
+            // Logout the user out and do some session thing and send the user back with a message
+            auth('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
