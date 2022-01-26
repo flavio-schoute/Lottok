@@ -56,16 +56,17 @@ class GameController extends Controller
      */
     public function create(): Application|Factory|View
     {
+        // Checks if user is admin else give error
         abort_if(!auth()->user()->is_admin, 403, 'Je hebt geen rechten om deze pagina te bezoeken.');
 
         $apiUrl = config('api.base_url');
-
+        // Retrieves data from API
         $apiResponse = Http::acceptJson()->withHeaders([
             'Content-Type' => 'application/json',
         ])->get($apiUrl . '/teams');
 
         $teams = json_decode($apiResponse);
-
+        // Returns to view
         return view('admin.game.create', compact('teams'));
     }
 
